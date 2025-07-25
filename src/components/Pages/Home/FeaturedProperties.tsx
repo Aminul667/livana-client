@@ -81,7 +81,7 @@ const FeaturedProperties = () => {
           {properties.map((property) => (
             <Card
               key={property.id}
-              className="group overflow-hidden border-[#B1AB86]/20 hover:shadow-xl transition-all duration-300 bg-white"
+              className="group overflow-hidden border-[#B1AB86]/20 hover:shadow-xl transition-all duration-300 bg-white py-0"
             >
               <div className="relative overflow-hidden">
                 <Image
