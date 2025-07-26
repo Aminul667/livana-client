@@ -9,10 +9,10 @@ import { useState } from "react";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
-  
-    const onSubmit = (data: TSignInFormValues) => {
-      console.log("Login data", data);
-    };
+
+  const onSubmit = (data: TSignInFormValues) => {
+    console.log("Login data", data);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FEFAE0] to-[#B1AB86]/20 flex items-center justify-center p-4">

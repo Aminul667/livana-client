@@ -5,6 +5,7 @@ import { FieldValues } from "react-hook-form";
 
 const LInputField = <T extends FieldValues>({
   className,
+  inputClass,
   registerName,
   label,
   placeholder,
@@ -15,6 +16,9 @@ const LInputField = <T extends FieldValues>({
 }: InputFieldProps<T>) => {
   const registerValueType = type === "number" ? { valueAsNumber: true } : {};
 
+  const defaultInputClass =
+    "flex w-full items-center self-stretch px-3 py-1.5 rounded-md border border-gray-400 bg-white";
+
   return (
     <div className={className}>
       {label && (
@@ -23,7 +27,7 @@ const LInputField = <T extends FieldValues>({
         </Label>
       )}
       <Input
-        className="flex w-full items-center self-stretch px-3 py-1.5 rounded-md border border-gray-400 bg-white"
+        className={inputClass || defaultInputClass}
         type={type}
         step={type === "number" ? "any" : undefined}
         id={registerName}
