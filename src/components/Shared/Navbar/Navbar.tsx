@@ -94,14 +94,13 @@ const Navbar = () => {
               >
                 Support
               </a>
-              <div className="flex space-x-2 pt-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-[#819067] text-[#819067] hover:bg-[#819067] hover:text-white flex-1 bg-transparent"
+              <div className="flex space-y-2 pt-2 flex-col">
+                <Link
+                  href="/sign-in"
+                  className="text-[#0A400C] border border-[#819067] hover:text-[#819067] font-medium transition-colors"
                 >
                   Sign In
-                </Button>
+                </Link>
                 <Button
                   size="sm"
                   className="bg-[#819067] hover:bg-[#0A400C] text-white flex-1"

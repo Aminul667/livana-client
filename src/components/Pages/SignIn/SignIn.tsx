@@ -1,24 +1,18 @@
+import { LivanaForm } from "@/components/Shared/Form/LivanaForm";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { signInSchema, TSignInFormValues } from "@/schema/auth.schema";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle sign-in logic here
-    console.log("Sign in attempt:", { email, password });
-  };
+  
+    const onSubmit = (data: TSignInFormValues) => {
+      console.log("Login data", data);
+    };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FEFAE0] to-[#B1AB86]/20 flex items-center justify-center p-4">
@@ -40,87 +34,101 @@ const SignIn = () => {
           </CardHeader>
 
           <CardContent className="space-y-6">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Email Field */}
-              <div className="space-y-2">
-                <label
-                  htmlFor="email"
-                  className="text-sm font-medium text-[#0A400C] block"
-                >
-                  Email Address
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#819067] w-4 h-4" />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 bg-white border-[#B1AB86]/30 focus:border-[#819067] focus:ring-[#819067]/20 text-[#0A400C] placeholder:text-[#819067]/60"
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* Password Field */}
-              <div className="space-y-2">
-                <label
-                  htmlFor="password"
-                  className="text-sm font-medium text-[#0A400C] block"
-                >
-                  Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#819067] w-4 h-4" />
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-10 bg-white border-[#B1AB86]/30 focus:border-[#819067] focus:ring-[#819067]/20 text-[#0A400C] placeholder:text-[#819067]/60"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={togglePasswordVisibility}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#819067] hover:text-[#0A400C] transition-colors"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
-                      <Eye className="w-4 h-4" />
+            <LivanaForm<TSignInFormValues>
+              schema={signInSchema}
+              onSubmit={onSubmit}
+              className="space-y-4"
+            >
+              {({ register, formState: { errors } }) => (
+                <>
+                  {/* Email Field */}
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="email"
+                      className="text-sm font-medium text-[#0A400C] block"
+                    >
+                      Email Address
+                    </label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#819067] w-4 h-4" />
+                      <Input
+                        {...register("email")}
+                        id="email"
+                        type="email"
+                        placeholder="Enter your email"
+                        className="pl-10 bg-white border-[#B1AB86]/30 focus:border-[#819067] focus:ring-[#819067]/20 text-[#0A400C] placeholder:text-[#819067]/60"
+                      />
+                    </div>
+                    {errors?.email && (
+                      <p className="text-red-500 mt-1">
+                        {(errors.email as { message?: string })?.message}
+                      </p>
                     )}
-                  </button>
-                </div>
-              </div>
+                  </div>
 
-              {/* Remember Me & Forgot Password */}
-              <div className="flex items-center justify-between text-sm">
-                <label className="flex items-center space-x-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 text-[#819067] border-[#B1AB86] rounded focus:ring-[#819067]/20"
-                  />
-                  <span className="text-[#819067]">Remember me</span>
-                </label>
-                <Link
-                  href="/forgot-password"
-                  className="text-[#819067] hover:text-[#0A400C] transition-colors"
-                >
-                  Forgot password?
-                </Link>
-              </div>
+                  {/* Password Field */}
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="password"
+                      className="text-sm font-medium text-[#0A400C] block"
+                    >
+                      Password
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#819067] w-4 h-4" />
+                      <Input
+                        {...register("password")}
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter your password"
+                        className="pl-10 pr-10 bg-white border-[#B1AB86]/30 focus:border-[#819067] focus:ring-[#819067]/20 text-[#0A400C] placeholder:text-[#819067]/60"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#819067] hover:text-[#0A400C] transition-colors"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="w-4 h-4" />
+                        ) : (
+                          <Eye className="w-4 h-4" />
+                        )}
+                      </button>
+                    </div>
+                    {errors?.password && (
+                      <p className="text-red-500 mt-1">
+                        {(errors.password as { message?: string })?.message}
+                      </p>
+                    )}
+                  </div>
 
-              {/* Sign In Button */}
-              <Button
-                type="submit"
-                className="w-full bg-[#819067] hover:bg-[#0A400C] text-white font-semibold py-3 transition-all duration-300 transform hover:scale-105"
-              >
-                Sign In
-              </Button>
-            </form>
+                  {/* Remember Me & Forgot Password */}
+                  <div className="flex items-center justify-between text-sm">
+                    <label className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 text-[#819067] border-[#B1AB86] rounded focus:ring-[#819067]/20"
+                      />
+                      <span className="text-[#819067]">Remember me</span>
+                    </label>
+                    <Link
+                      href="/forgot-password"
+                      className="text-[#819067] hover:text-[#0A400C] transition-colors"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
+
+                  {/* Sign In Button */}
+                  <Button
+                    type="submit"
+                    className="w-full bg-[#819067] hover:bg-[#0A400C] text-white font-semibold py-3 transition-all duration-300 transform hover:scale-105"
+                  >
+                    Sign In
+                  </Button>
+                </>
+              )}
+            </LivanaForm>
 
             {/* Divider */}
             <div className="relative">
