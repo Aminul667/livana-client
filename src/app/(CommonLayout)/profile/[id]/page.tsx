@@ -10,6 +10,7 @@ interface ProfilePageProps {
 
 // Mock user data
 const mockUser: TUserProfile = {
+  id: "1",
   firstName: "Sarah",
   lastName: "Johnson",
   phone: "+1 (555) 123-4567",
@@ -25,14 +26,12 @@ const ProfilePage = ({ params }: ProfilePageProps) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FEFAE0] to-[#B1AB86]/20 py-8 px-4 mt-16">
       <div className="container mx-auto max-w-4xl">
-        {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-[#0A400C] mb-2">My Profile</h1>
           <p className="text-[#819067]">
             Manage your personal information and preferences
           </p>
         </div>
-
         <Profile profile={mockUser} />
       </div>
     </div>

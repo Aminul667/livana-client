@@ -1,4 +1,5 @@
 export type TUserProfile = {
+  id?: string;
   firstName: string;
   lastName: string;
   phone: string;

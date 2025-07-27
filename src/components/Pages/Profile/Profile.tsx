@@ -18,7 +18,7 @@ const Profile = ({ profile }: { profile: TUserProfile }) => {
               Profile Information
             </CardTitle>
 
-            <Link href="#">
+            <Link href={`/profile/edit/${profile.id}`}>
               <Button className="bg-[#819067] hover:bg-[#0A400C] text-white">
                 <Edit className="w-4 h-4 mr-2" />
                 Edit Profile
