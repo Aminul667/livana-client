@@ -13,7 +13,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center">
+          <div>
             <Link href="/" className="text-2xl font-bold text-[#0A400C]">
               Livana
             </Link>
@@ -47,14 +47,23 @@ const Navbar = () => {
               href="/sign-in"
               className="text-[#0A400C] hover:text-[#819067] font-medium transition-colors"
             >
-              Sign In
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-[#819067] text-[#819067] hover:bg-[#819067] hover:text-white bg-transparent cursor-pointer"
+              >
+                Sign In
+              </Button>
             </Link>
-            <Button
-              size="sm"
-              className="bg-[#819067] hover:bg-[#0A400C] text-white"
-            >
-              List Your Property
-            </Button>
+
+            <Link href="/listing/property">
+              <Button
+                size="sm"
+                className="bg-[#819067] hover:bg-[#0A400C] text-white cursor-pointer"
+              >
+                List Your Property
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -96,19 +105,24 @@ const Navbar = () => {
               >
                 Support
               </a>
-              <div className="flex space-y-2 pt-2 flex-col">
-                <Link
-                  href="/sign-in"
-                  className="text-[#0A400C] border border-[#819067] hover:text-[#819067] font-medium transition-colors"
-                >
-                  Sign In
+              <div className="flex space-x-2 pt-2">
+                <Link href="/sign-in" className="w-1/2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full border-[#819067] text-[#819067] hover:bg-[#819067] hover:text-white bg-transparent cursor-pointer"
+                  >
+                    Sign In
+                  </Button>
                 </Link>
-                <Button
-                  size="sm"
-                  className="bg-[#819067] hover:bg-[#0A400C] text-white flex-1"
-                >
-                  List Your Property
-                </Button>
+                <Link className="w-1/2" href="/listing/property">
+                  <Button
+                    size="sm"
+                    className="w-full bg-[#819067] hover:bg-[#0A400C] text-white cursor-pointer"
+                  >
+                    List Your Property
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
