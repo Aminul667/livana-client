@@ -14,17 +14,6 @@ type UserProfile = {
   location: string;
 };
 
-// Mock user data
-const mockUser: UserProfile = {
-  firstName: "Sarah",
-  lastName: "Johnson",
-  phone: "+1 (555) 123-4567",
-  profilePhoto: "/placeholder.svg?height=150&width=150&text=SJ",
-  about:
-    "I'm a marketing professional looking for a comfortable and modern apartment in the city. I love cooking, reading, and spending time with my two cats. I'm a responsible tenant with excellent references and stable income.",
-  location: "Seattle, WA",
-};
-
 const Test = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
