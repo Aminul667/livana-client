@@ -1,11 +1,13 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 import { InputFieldProps } from "@/types/form.types";
 import { FieldValues } from "react-hook-form";
 
 const LInputField = <T extends FieldValues>({
   className,
   inputClass,
+  labelClass,
   registerName,
   label,
   placeholder,
@@ -22,7 +24,7 @@ const LInputField = <T extends FieldValues>({
   return (
     <div className={className}>
       {label && (
-        <Label htmlFor={registerName} className="mb-2">
+        <Label htmlFor={registerName} className={cn("mb-2", labelClass)}>
           {label}
         </Label>
       )}
@@ -36,7 +38,7 @@ const LInputField = <T extends FieldValues>({
         disabled={isDisabled}
       />
       {errors?.[registerName] && (
-        <p className="text-red-500 mt-1">
+        <p className="text-red-500 text-sm mt-1">
           {(errors[registerName] as { message?: string })?.message}
         </p>
       )}
