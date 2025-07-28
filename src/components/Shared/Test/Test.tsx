@@ -14,7 +14,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Controller } from "react-hook-form";
-import { listingTypeConstants } from "@/constants/listing.constants";
+import {
+  listingTypeConstants,
+  propertyTypeConstants,
+  purposeConstants,
+} from "@/constants/listing.constants";
 import LSelectItem from "../Form/LSelectItem";
 import { Button } from "@/components/ui/button";
 
@@ -34,6 +38,7 @@ const Test = () => {
       >
         {({ register, control, formState: { errors } }) => (
           <>
+            {/* basic information */}
             <Card className="border-[#B1AB86]/30 shadow-xl bg-white">
               <CardHeader>
                 <CardTitle className="text-xl font-bold text-[#0A400C] flex items-center">
@@ -84,9 +89,134 @@ const Test = () => {
                     errors={errors}
                     className="space-y-2"
                     labelClass="text-sm font-medium text-[#0A400C] mb-2"
-                    triggerClass="w-full bg-white border-[#B1AB86]/30 focus:border-[#819067] focus:ring-[#819067]/20"
+                    triggerClass="w-full border-[#B1AB86]/30 focus:border-[#819067] focus:ring-[#819067]/20"
                     contentClass="bg-white border-[#B1AB86]/30"
                     itemClass="text-[#0A400C] hover:bg-[#B1AB86]/10"
+                  />
+
+                  {/* property type */}
+                  <LSelectItem
+                    registerName="propertyType"
+                    control={control}
+                    label="Property Type *"
+                    placeholder="Select Property Type"
+                    options={propertyTypeConstants}
+                    errors={errors}
+                    className="space-y-2"
+                    labelClass="text-sm font-medium text-[#0A400C] mb-2"
+                    triggerClass="w-full border-[#B1AB86]/30 focus:border-[#819067] focus:ring-[#819067]/20"
+                    contentClass="bg-white border-[#B1AB86]/30"
+                    itemClass="text-[#0A400C] hover:bg-[#B1AB86]/10"
+                  />
+
+                  {/* Purpose */}
+                  <LSelectItem
+                    registerName="purpose"
+                    control={control}
+                    label="Purpose *"
+                    placeholder="Select Purpose"
+                    options={purposeConstants}
+                    errors={errors}
+                    className="space-y-2"
+                    labelClass="text-sm font-medium text-[#0A400C] mb-2"
+                    triggerClass="w-full border-[#B1AB86]/30 focus:border-[#819067] focus:ring-[#819067]/20"
+                    contentClass="bg-white border-[#B1AB86]/30"
+                    itemClass="text-[#0A400C] hover:bg-[#B1AB86]/10"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* location details */}
+            <Card className="border-[#B1AB86]/30 shadow-xl bg-white">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold text-[#0A400C] flex items-center">
+                  <MapPin className="w-5 h-5 mr-2 text-[#819067]" />
+                  Location Details
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Address */}
+                <LInputField<TProperty>
+                  registerName="address"
+                  label="Street Address *"
+                  register={register}
+                  errors={errors}
+                  className="space-y-2"
+                  inputClass="bg-white border-[#B1AB86]/30 focus:border-[#819067] focus:ring-[#819067]/20"
+                  labelClass="text-sm font-medium text-[#0A400C] flex items-center"
+                />
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {/* City */}
+                  <LInputField<TProperty>
+                    registerName="city"
+                    label="City *"
+                    register={register}
+                    errors={errors}
+                    className="space-y-2"
+                    inputClass="bg-white border-[#B1AB86]/30 focus:border-[#819067] focus:ring-[#819067]/20"
+                    labelClass="text-sm font-medium text-[#0A400C] flex items-center"
+                  />
+
+                  {/* City */}
+                  <LInputField<TProperty>
+                    registerName="state"
+                    label="State *"
+                    register={register}
+                    errors={errors}
+                    className="space-y-2"
+                    inputClass="bg-white border-[#B1AB86]/30 focus:border-[#819067] focus:ring-[#819067]/20"
+                    labelClass="text-sm font-medium text-[#0A400C] flex items-center"
+                  />
+
+                  {/* City */}
+                  <LInputField<TProperty>
+                    registerName="postalCode"
+                    label="Postal Code *"
+                    register={register}
+                    errors={errors}
+                    className="space-y-2"
+                    inputClass="bg-white border-[#B1AB86]/30 focus:border-[#819067] focus:ring-[#819067]/20"
+                    labelClass="text-sm font-medium text-[#0A400C] flex items-center"
+                  />
+
+                  {/* City */}
+                  <LInputField<TProperty>
+                    registerName="country"
+                    label="Country *"
+                    register={register}
+                    errors={errors}
+                    className="space-y-2"
+                    inputClass="bg-white border-[#B1AB86]/30 focus:border-[#819067] focus:ring-[#819067]/20"
+                    labelClass="text-sm font-medium text-[#0A400C] flex items-center"
+                  />
+                </div>
+
+                {/* Coordinates (Optional) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Latitude */}
+                  <LInputField<TProperty>
+                    registerName="latitude"
+                    type="number"
+                    label="Latitude (Optional)"
+                    register={register}
+                    errors={errors}
+                    className="space-y-2"
+                    inputClass="bg-white border-[#B1AB86]/30 focus:border-[#819067] focus:ring-[#819067]/20"
+                    labelClass="text-sm font-medium text-[#0A400C] flex items-center"
+                  />
+
+                  {/* Longitude */}
+                  <LInputField<TProperty>
+                    registerName="longitude"
+                    type="number"
+                    label="Longitude (Optional)"
+                    register={register}
+                    errors={errors}
+                    className="space-y-2"
+                    inputClass="bg-white border-[#B1AB86]/30 focus:border-[#819067] focus:ring-[#819067]/20"
+                    labelClass="text-sm font-medium text-[#0A400C] flex items-center"
                   />
                 </div>
               </CardContent>

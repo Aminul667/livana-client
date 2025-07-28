@@ -33,9 +33,11 @@ const LSelectItem = <T extends FieldValues, TValue = string>({
       control={control}
       render={({ field }) => (
         <div className={className}>
-          <Label htmlFor={registerName} className={labelClass}>
-            {label}
-          </Label>
+          {label && (
+            <Label htmlFor={registerName} className={labelClass}>
+              {label}
+            </Label>
+          )}
           <Select
             disabled={disabled}
             value={field.value !== undefined ? String(field.value) : ""}

@@ -5,7 +5,7 @@ import { z } from "zod";
 export const listingTypeEnum = z.enum(["rent", "sale"]);
 export const propertyTypeEnum = z.enum(["flat", "house", "villa", "studio"]);
 export const purposeEnum = z.enum(["residential", "commercial"]);
-export const statusEnum = z.enum(["available", "rented", "sold"]);
+// export const statusEnum = z.enum(["available", "rented", "sold"]);
 export const furnishedStatusEnum = z.enum([
   "furnished",
   "semi_furnished",
@@ -29,7 +29,7 @@ export const propertySchema = z.object({
   listingType: listingTypeEnum,
   propertyType: propertyTypeEnum,
   purpose: purposeEnum,
-  status: statusEnum,
+  // status: statusEnum,
 
   // Location
   address: requiredString("Address is required"),
@@ -79,6 +79,6 @@ setEnumErrorMessage(
   purposeEnum,
   "Purpose must be 'residential' or 'commercial'"
 );
-setEnumErrorMessage(statusEnum, "Property status must be valid");
+// setEnumErrorMessage(statusEnum, "Property status must be valid");
 
 export type TProperty = z.infer<typeof propertySchema>;
