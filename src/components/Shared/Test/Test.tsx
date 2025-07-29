@@ -2,11 +2,24 @@ import React from "react";
 import { LivanaForm } from "../Form/LivanaForm";
 import { propertySchema, TProperty } from "@/schema/listing.schema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DollarSign, Home, MapPin, Square } from "lucide-react";
+import {
+  Car,
+  DollarSign,
+  Home,
+  MapPin,
+  Square,
+  CableCarIcon as Elevator,
+  TreePine,
+  Thermometer,
+  Snowflake,
+  Heart,
+  Camera,
+} from "lucide-react";
 import LInputField from "../Form/LInputField";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  checkboxOptions,
   furnishedConstants,
   listingTypeConstants,
   propertyTypeConstants,
@@ -15,6 +28,9 @@ import {
 } from "@/constants/listing.constants";
 import LSelectItem from "../Form/LSelectItem";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import LCheckbox from "../Form/LCheckbox";
+import LFileUpload from "../Form/LFileUpload";
 
 const Test = () => {
   const onSubmit = (data: TProperty) => {
@@ -368,7 +384,131 @@ const Test = () => {
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {/* Parking */}
+                  <LCheckbox
+                    name="hasParking"
+                    control={control}
+                    label="Parking Available"
+                    icon={<Car className="w-4 h-4 text-[#819067]" />}
+                    errors={errors}
+                    checkboxClass="data-[state=checked]:bg-[#819067] data-[state=checked]:border-[#819067]"
+                    labelClass="text-sm text-[#0A400C] flex items-center cursor-pointer"
+                  />
+
+                  {/* Lift */}
+                  <LCheckbox
+                    name="hasLift"
+                    control={control}
+                    label="Elevator/Lift"
+                    icon={<Elevator className="w-4 h-4 text-[#819067]" />}
+                    errors={errors}
+                    checkboxClass="data-[state=checked]:bg-[#819067] data-[state=checked]:border-[#819067]"
+                    labelClass="text-sm text-[#0A400C] flex items-center cursor-pointer"
+                  />
+
+                  {/* Balcony */}
+                  <LCheckbox
+                    name="hasBalcony"
+                    control={control}
+                    label="Balcony"
+                    icon={<TreePine className="w-4 h-4 text-[#819067]" />}
+                    errors={errors}
+                    checkboxClass="data-[state=checked]:bg-[#819067] data-[state=checked]:border-[#819067]"
+                    labelClass="text-sm text-[#0A400C] flex items-center cursor-pointer"
+                  />
+
+                  {/* heating */}
+                  <LCheckbox
+                    name="heating"
+                    control={control}
+                    label="Heating"
+                    icon={<Thermometer className="w-4 h-4 text-[#819067]" />}
+                    errors={errors}
+                    checkboxClass="data-[state=checked]:bg-[#819067] data-[state=checked]:border-[#819067]"
+                    labelClass="text-sm text-[#0A400C] flex items-center cursor-pointer"
+                  />
+
+                  {/* Cooling */}
+                  <LCheckbox
+                    name="cooling"
+                    control={control}
+                    label="Air Conditioning"
+                    icon={<Snowflake className="w-4 h-4 text-[#819067]" />}
+                    errors={errors}
+                    checkboxClass="data-[state=checked]:bg-[#819067] data-[state=checked]:border-[#819067]"
+                    labelClass="text-sm text-[#0A400C] flex items-center cursor-pointer"
+                  />
+
+                  {/* Pet Friendly */}
+                  <LCheckbox
+                    name="petFriendly"
+                    control={control}
+                    label="Pet Friendly"
+                    icon={<Heart className="w-4 h-4 text-[#819067]" />}
+                    errors={errors}
+                    checkboxClass="data-[state=checked]:bg-[#819067] data-[state=checked]:border-[#819067]"
+                    labelClass="text-sm text-[#0A400C] flex items-center cursor-pointer"
+                  />
+
+                  {/* Internet */}
+                  <LCheckbox
+                    name="internetIncluded"
+                    control={control}
+                    label="Internet Included"
+                    icon={<Heart className="w-4 h-4 text-[#819067]" />}
+                    errors={errors}
+                    checkboxClass="data-[state=checked]:bg-[#819067] data-[state=checked]:border-[#819067]"
+                    labelClass="text-sm text-[#0A400C] flex items-center cursor-pointer"
+                  />
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Media Upload */}
+            <Card className="border-[#B1AB86]/30 shadow-xl bg-white">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold text-[#0A400C] flex items-center">
+                  <Camera className="w-5 h-5 mr-2 text-[#819067]" />
+                  Property Images & Video
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Image Upload */}
+                <LFileUpload
+                  name="images"
+                  control={control}
+                  label="Property Images"
+                  maxImages={10}
+                  maxFileSizeMB={10}
+                  errors={errors}
+                />
+
+                {/* Video URL */}
+                {/* <div className="space-y-2">
+                  <Label
+                    htmlFor="videoUrl"
+                    className="text-sm font-medium text-[#0A400C]"
+                  >
+                    Video URL (Optional)
+                  </Label>
+                  <Input
+                    id="videoUrl"
+                    name="videoUrl"
+                    type="url"
+                    className="bg-white border-[#B1AB86]/30 focus:border-[#819067] focus:ring-[#819067]/20"
+                    placeholder="https://youtube.com/watch?v=..."
+                  />
+                </div> */}
+
+                <LInputField
+                  registerName="videoUrl"
+                  label="Video URL (Optional)"
+                  register={register}
+                  errors={errors}
+                  placeholder="https://youtube.com/watch?v=..."
+                  className="space-y-2"
+                  inputClass="bg-white border-[#B1AB86]/30 focus:border-[#819067] focus:ring-[#819067]/20"
+                  labelClass="text-sm font-medium text-[#0A400C] flex items-center"
+                />
               </CardContent>
             </Card>
 

@@ -1,3 +1,14 @@
+import { ComponentType } from "react";
+import {
+  Car,
+  CableCarIcon as Elevator,
+  TreePine,
+  Thermometer,
+  Snowflake,
+  Heart,
+  Wifi,
+} from "lucide-react";
+
 export const listingTypeConstants = [
   { value: "sale", label: "For Sale" },
   { value: "rent", label: "For Rent" },
@@ -25,4 +36,48 @@ export const rentFrequencyConstants = [
   { value: "monthly", label: "Monthly" },
   { value: "half_yearly", label: "Half Yearly" },
   { value: "yearly", label: "Yearly" },
+];
+
+export interface ICheckboxOption {
+  name: string;
+  label: string;
+  icon: ComponentType<{ className?: string }>;
+}
+
+export const checkboxOptions: ICheckboxOption[] = [
+  {
+    name: "hasParking",
+    label: "Parking Available",
+    icon: Car,
+  },
+  {
+    name: "hasLift",
+    label: "Elevator/Lift",
+    icon: Elevator,
+  },
+  {
+    name: "hasBalcony",
+    label: "Balcony",
+    icon: TreePine,
+  },
+  {
+    name: "heating",
+    label: "Heating",
+    icon: Thermometer,
+  },
+  {
+    name: "cooling",
+    label: "Air Conditioning",
+    icon: Snowflake,
+  },
+  {
+    name: "petFriendly",
+    label: "Pet Friendly",
+    icon: Heart,
+  },
+  {
+    name: "internetIncluded",
+    label: "Internet Included",
+    icon: Wifi,
+  },
 ];

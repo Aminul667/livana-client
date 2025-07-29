@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { z } from "zod";
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
 // Enums
 export const listingTypeEnum = z.enum(["rent", "sale"]);
@@ -11,7 +12,7 @@ export const furnishedStatusEnum = z.enum([
   "semi_furnished",
   "unfurnished",
 ]);
-export const rentFrequencyEnum = z.enum(["monthly", "half_yearly", "yearly",]);
+export const rentFrequencyEnum = z.enum(["monthly", "half_yearly", "yearly"]);
 
 // Helper function for required fields
 function requiredString(message: string) {
@@ -64,7 +65,23 @@ export const propertySchema = z.object({
   internetIncluded: z.boolean(),
 
   // Media
-  images: z.array(z.string().url("Each image must be a valid URL")),
+  images: z
+    .array(
+      z.custom<File>(
+        (file) => {
+          return (
+            file instanceof File &&
+            file.size <= MAX_FILE_SIZE &&
+            file.type.startsWith("image/")
+          );
+        },
+        {
+          message: "Each file must be an image under 10MB",
+        }
+      )
+    )
+    .min(1, "At least one image is required")
+    .max(10, "You can upload up to 10 images"),
   videoUrl: z.string().url("Must be a valid video URL").optional(),
 });
 

@@ -6,6 +6,7 @@ import {
   Control,
 } from "react-hook-form";
 
+// input field props
 export interface InputFieldProps<T extends FieldValues = FieldValues> {
   registerName: Path<T>;
   label?: string;
@@ -25,7 +26,7 @@ export interface Option<T = string> {
   value: T;
 }
 
-// Component props
+// select props
 export interface FormSelectProps<T extends FieldValues, TValue = string> {
   registerName: Path<T>;
   control: Control<T>;
@@ -40,4 +41,26 @@ export interface FormSelectProps<T extends FieldValues, TValue = string> {
   contentClass?: string;
   itemClass?: string;
   disabled?: boolean;
+}
+
+// checkbox props
+export interface FormCheckboxProps<T extends FieldValues> {
+  name: Path<T>;
+  control: Control<T>;
+  label: string;
+  icon?: React.ReactNode;
+  errors?: FieldErrors<T>;
+  labelClass?: string;
+  containerClass?: string;
+  checkboxClass?: string;
+}
+
+// file upload
+export interface FormImageUploadProps<T extends FieldValues> {
+  name: Path<T>;
+  control: Control<T>;
+  errors?: FieldErrors<T>;
+  maxImages?: number;
+  maxFileSizeMB?: number;
+  label?: string;
 }
