@@ -11,7 +11,7 @@ export const furnishedStatusEnum = z.enum([
   "semi_furnished",
   "unfurnished",
 ]);
-export const rentFrequencyEnum = z.enum(["monthly", "yearly"]);
+export const rentFrequencyEnum = z.enum(["monthly", "half_yearly", "yearly",]);
 
 // Helper function for required fields
 function requiredString(message: string) {
@@ -51,6 +51,7 @@ export const propertySchema = z.object({
   // Rent Specific
   rentFrequency: rentFrequencyEnum.optional(),
   depositAmount: z.number().positive("Must be positive").optional(),
+  maintenanceFee: z.number().positive("Must be positive").optional(),
 
   // Features
   amenities: z.array(z.string()).optional(),
@@ -61,7 +62,6 @@ export const propertySchema = z.object({
   cooling: z.boolean(),
   petFriendly: z.boolean(),
   internetIncluded: z.boolean(),
-  maintenanceFee: z.number().positive("Must be positive").optional(),
 
   // Media
   images: z.array(z.string().url("Each image must be a valid URL")),

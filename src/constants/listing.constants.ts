@@ -14,3 +14,15 @@ export const purposeConstants = [
   { value: "residential", label: "Residential" },
   { value: "commercial", label: "Commercial" },
 ];
+
+export const furnishedConstants = [
+  { value: "furnished", label: "Furnished" },
+  { value: "semi_furnished", label: "Semi Furnished" },
+  { value: "unfurnished", label: "Unfurnished" },
+];
+
+export const rentFrequencyConstants = [
+  { value: "monthly", label: "Monthly" },
+  { value: "half_yearly", label: "Half Yearly" },
+  { value: "yearly", label: "Yearly" },
+];
