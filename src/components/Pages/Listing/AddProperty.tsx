@@ -1,21 +1,12 @@
-import React from "react";
-import { LivanaForm } from "../Form/LivanaForm";
-import { propertySchema, TProperty } from "@/schema/listing.schema";
+"use client";
+
+import LCheckbox from "@/components/Shared/Form/LCheckbox";
+import LFileUpload from "@/components/Shared/Form/LFileUpload";
+import LInputField from "@/components/Shared/Form/LInputField";
+import { LivanaForm } from "@/components/Shared/Form/LivanaForm";
+import LSelectItem from "@/components/Shared/Form/LSelectItem";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Car,
-  DollarSign,
-  Home,
-  MapPin,
-  Square,
-  CableCarIcon as Elevator,
-  TreePine,
-  Thermometer,
-  Snowflake,
-  Heart,
-  Camera,
-} from "lucide-react";
-import LInputField from "../Form/LInputField";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -25,22 +16,40 @@ import {
   purposeConstants,
   rentFrequencyConstants,
 } from "@/constants/listing.constants";
-import LSelectItem from "../Form/LSelectItem";
-import { Button } from "@/components/ui/button";
-import LCheckbox from "../Form/LCheckbox";
-import LFileUpload from "../Form/LFileUpload";
+import { propertySchema, TProperty } from "@/schema/listing.schema";
+import {
+  DollarSign,
+  Home,
+  MapPin,
+  Square,
+  CableCarIcon as Elevator,
+  Car,
+  TreePine,
+  Thermometer,
+  Snowflake,
+  Heart,
+  Camera,
+} from "lucide-react";
+import React from "react";
 
-const Test = () => {
+const AddProperty = () => {
   const onSubmit = (data: TProperty) => {
     console.log("Property data", data);
     alert(JSON.stringify(data, null, 2));
   };
   return (
     <>
-      <h2>This is Test page</h2>
       <LivanaForm<TProperty>
         schema={propertySchema}
-        // defaultValues={{ role: "" }}
+        defaultValues={{
+          hasParking: false,
+          hasLift: false,
+          hasBalcony: false,
+          heating: false,
+          cooling: false,
+          petFriendly: false,
+          internetIncluded: false,
+        }}
         onSubmit={onSubmit}
         className="space-y-8"
       >
@@ -76,10 +85,10 @@ const Test = () => {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Price */}
-                  <LInputField<TProperty>
+                  <LInputField
                     registerName="price"
                     type="number"
-                    label="Price"
+                    label="Price *"
                     register={register}
                     errors={errors}
                     className="space-y-2"
@@ -345,7 +354,7 @@ const Test = () => {
                   />
 
                   {/* deposit amount */}
-                  <LInputField<TProperty>
+                  <LInputField
                     registerName="depositAmount"
                     type="number"
                     label="Deposit Amount"
@@ -357,7 +366,7 @@ const Test = () => {
                   />
 
                   {/* maintenance fee */}
-                  <LInputField<TProperty>
+                  <LInputField
                     registerName="maintenanceFee"
                     type="number"
                     label="Maintenance Fee"
@@ -507,4 +516,4 @@ const Test = () => {
   );
 };
 
-export default Test;
+export default AddProperty;

@@ -1,3 +1,5 @@
+"use client";
+
 import { Label } from "@/components/ui/label";
 import { FormImageUploadProps } from "@/types/form.types";
 import { Upload, X } from "lucide-react";

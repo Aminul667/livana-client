@@ -24,7 +24,7 @@ export const propertySchema = z.object({
   description: requiredString("Description is required"),
   price: z
     .number()
-    .min(0, "Price must be greater than or equal to zero")
+    .min(0, "Price must be greater than zero")
     .refine((val) => val > 0, "Price must be greater than zero"),
 
   listingType: listingTypeEnum,
@@ -38,21 +38,38 @@ export const propertySchema = z.object({
   state: requiredString("State is required"),
   postalCode: requiredString("Postal code is required"),
   country: requiredString("Country is required"),
-  latitude: z.number().optional(),
-  longitude: z.number().optional(),
+  latitude: z.preprocess((val) => {
+    const num = Number(val);
+    return isNaN(num) ? undefined : num;
+  }, z.number().optional()),
+
+  longitude: z.preprocess((val) => {
+    const num = Number(val);
+    return isNaN(num) ? undefined : num;
+  }, z.number().optional()),
 
   // Details
   bedrooms: z.number().int().min(0, "Must be 0 or more"),
   bathrooms: z.number().int().min(0, "Must be 0 or more"),
   areaSqFt: z.number().positive("Area must be greater than zero"),
   floorNumber: z.number().int(),
-  totalFloors: z.number().int().optional(),
+  totalFloors: z.preprocess((val) => {
+    const num = Number(val);
+    return Number.isInteger(num) ? num : undefined;
+  }, z.number().int().optional()),
   furnished: furnishedStatusEnum.optional(),
 
   // Rent Specific
   rentFrequency: rentFrequencyEnum.optional(),
-  depositAmount: z.number().positive("Must be positive").optional(),
-  maintenanceFee: z.number().positive("Must be positive").optional(),
+  depositAmount: z.preprocess((val) => {
+    const num = Number(val);
+    return isNaN(num) ? undefined : num;
+  }, z.number().positive("Must be greater than zero").optional()),
+
+  maintenanceFee: z.preprocess((val) => {
+    const num = Number(val);
+    return isNaN(num) ? undefined : num;
+  }, z.number().positive("Must be greater than zero").optional()),
 
   // Features
   amenities: z.array(z.string()).optional(),
@@ -82,7 +99,10 @@ export const propertySchema = z.object({
     )
     .min(1, "At least one image is required")
     .max(10, "You can upload up to 10 images"),
-  videoUrl: z.string().url("Must be a valid video URL").optional(),
+  videoUrl: z.preprocess((val) => {
+    if (typeof val !== "string" || val.trim() === "") return undefined;
+    return val;
+  }, z.string().url({ message: "Must be a valid video URL" }).optional()),
 });
 
 // Custom error messages for enums
