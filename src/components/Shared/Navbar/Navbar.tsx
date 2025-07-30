@@ -56,7 +56,7 @@ const Navbar = () => {
               </Button>
             </Link>
 
-            <Link href="/listing/property">
+            <Link href="/listing/add-property">
               <Button
                 size="sm"
                 className="bg-[#819067] hover:bg-[#0A400C] text-white cursor-pointer"
@@ -115,7 +115,7 @@ const Navbar = () => {
                     Sign In
                   </Button>
                 </Link>
-                <Link className="w-1/2" href="/listing/property">
+                <Link className="w-1/2" href="/listing/add-property">
                   <Button
                     size="sm"
                     className="w-full bg-[#819067] hover:bg-[#0A400C] text-white cursor-pointer"

@@ -30,7 +30,6 @@ export const propertySchema = z.object({
   listingType: listingTypeEnum,
   propertyType: propertyTypeEnum,
   purpose: purposeEnum,
-  // status: statusEnum,
 
   // Location
   address: requiredString("Address is required"),
@@ -57,7 +56,7 @@ export const propertySchema = z.object({
     const num = Number(val);
     return Number.isInteger(num) ? num : undefined;
   }, z.number().int().optional()),
-  furnished: furnishedStatusEnum.optional(),
+  furnished: furnishedStatusEnum,
 
   // Rent Specific
   rentFrequency: rentFrequencyEnum.optional(),
@@ -116,6 +115,6 @@ setEnumErrorMessage(
   purposeEnum,
   "Purpose must be 'residential' or 'commercial'"
 );
-// setEnumErrorMessage(statusEnum, "Property status must be valid");
+setEnumErrorMessage(furnishedStatusEnum, "Select a valid status");
 
 export type TProperty = z.infer<typeof propertySchema>;
