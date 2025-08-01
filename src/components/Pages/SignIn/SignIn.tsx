@@ -12,6 +12,7 @@ const SignIn = () => {
 
   const onSubmit = (data: TSignInFormValues) => {
     console.log("Login data", data);
+    alert(JSON.stringify(data, null, 2));
   };
 
   return (

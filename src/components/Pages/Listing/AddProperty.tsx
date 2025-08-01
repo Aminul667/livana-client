@@ -35,19 +35,6 @@ import {
 import React from "react";
 
 const AddProperty = () => {
-  // const handleLocationPick = async () => {
-  //   try {
-  //     const { latitude, longitude } = await getCurrentLocation();
-
-  //     setValue("latitude", latitude, { shouldValidate: true });
-  //     setValue("longitude", longitude, { shouldValidate: true });
-  //     alert(`Latitude: ${latitude}, Longitude: ${longitude}`);
-  //   } catch (error: any) {
-  //     alert(error.message);
-  //     console.error("Geolocation error:", error);
-  //   }
-  // };
-
   const onSubmit = (data: TProperty) => {
     console.log("Property data", data);
     alert(JSON.stringify(data, null, 2));
