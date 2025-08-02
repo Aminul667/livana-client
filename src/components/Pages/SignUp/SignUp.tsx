@@ -11,18 +11,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useRegisterUser } from "@/hooks/user.hooks";
 import { signUpSchema, TSignUpFormValues } from "@/schema/auth.schema";
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Controller } from "react-hook-form";
 
 const SignUp = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const { mutate: handleUseRegisterUser, isPending } = useRegisterUser();
 
   const onSubmit = (data: TSignUpFormValues) => {
-    console.log("Login data", data);
-    alert(JSON.stringify(data, null, 2));
+    const userData = {
+      email: data.email,
+      password: data.password,
+      role: data.role,
+    };
+
+    handleUseRegisterUser(userData);
+    if (!isPending) {
+      router.push("/sign-in");
+    }
   };
 
   return (
@@ -204,9 +216,10 @@ const SignUp = () => {
                   {/* Sign Up Button */}
                   <Button
                     type="submit"
-                    className="w-full bg-[#819067] hover:bg-[#0A400C] text-white font-semibold py-3 transition-all duration-300 transform hover:scale-105"
+                    className="w-full bg-[#819067] hover:bg-[#0A400C] text-white font-semibold py-3 transition-all duration-300 transform cursor-pointer"
+                    disabled={isPending}
                   >
-                    Create Account
+                    {isPending ? "Creating account..." : "Sign Up"}
                   </Button>
                 </>
               )}

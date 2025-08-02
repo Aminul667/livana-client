@@ -2,17 +2,20 @@ import { LivanaForm } from "@/components/Shared/Form/LivanaForm";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useUserLogin } from "@/hooks/auth.hooks";
 import { signInSchema, TSignInFormValues } from "@/schema/auth.schema";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const SignIn = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const { mutate: handleUseUserLogin, isPending } = useUserLogin();
 
   const onSubmit = (data: TSignInFormValues) => {
-    console.log("Login data", data);
-    alert(JSON.stringify(data, null, 2));
+    handleUseUserLogin(data);
   };
 
   return (
@@ -123,9 +126,10 @@ const SignIn = () => {
                   {/* Sign In Button */}
                   <Button
                     type="submit"
-                    className="w-full bg-[#819067] hover:bg-[#0A400C] text-white font-semibold py-3 transition-all duration-300 transform hover:scale-105"
+                    className="w-full bg-[#819067] hover:bg-[#0A400C] text-white font-semibold py-3 transition-all duration-300 transform cursor-pointer"
+                    disabled={isPending}
                   >
-                    Sign In
+                    {isPending ? "Signing in..." : "Sign In"}
                   </Button>
                 </>
               )}
