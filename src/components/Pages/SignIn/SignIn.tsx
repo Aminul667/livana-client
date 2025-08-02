@@ -6,11 +6,9 @@ import { useUserLogin } from "@/hooks/auth.hooks";
 import { signInSchema, TSignInFormValues } from "@/schema/auth.schema";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const SignIn = () => {
-  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const { mutate: handleUseUserLogin, isPending } = useUserLogin();
 

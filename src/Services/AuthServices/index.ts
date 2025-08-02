@@ -18,3 +18,22 @@ export const loginUser = async (userData: FieldValues) => {
     throw new Error(errorMessage);
   }
 };
+
+export const logout = async () => {
+  await axiosInstance.post("/auth/logout");
+};
+
+export const getCurrentUser = async () => {
+  try {
+    const { data } = await axiosInstance.get("/user/me");
+    return data.data;
+  } catch (error) {
+    const axiosError = error as AxiosError;
+
+    const errorMessage =
+      (axiosError.response?.data as { message?: string })?.message ||
+      axiosError.message;
+
+    throw new Error(errorMessage);
+  }
+};

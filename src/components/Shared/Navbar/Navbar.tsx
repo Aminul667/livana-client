@@ -1,12 +1,24 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useCurrentUser } from "@/hooks/auth.hooks";
+import { logout } from "@/Services/AuthServices";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const Navbar = () => {
+  const router = useRouter();
+  const { data: user, isLoading, isError } = useCurrentUser();
+  console.log("user from navbar", user);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleLogout = async () => {
+    await logout();
+    router.push("/sign-in"); // or redirect
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#FEFAE0]/95 backdrop-blur-md border-b border-[#B1AB86]/20 shadow-sm">
@@ -43,18 +55,29 @@ const Navbar = () => {
 
           {/* Desktop Auth & Actions */}
           <div className="hidden lg:flex items-center space-x-4">
-            <Link
-              href="/sign-in"
-              className="text-[#0A400C] hover:text-[#819067] font-medium transition-colors"
-            >
+            {user ? (
               <Button
                 variant="outline"
                 size="sm"
                 className="border-[#819067] text-[#819067] hover:bg-[#819067] hover:text-white bg-transparent cursor-pointer"
+                onClick={handleLogout}
               >
-                Sign In
+                Sign out
               </Button>
-            </Link>
+            ) : (
+              <Link
+                href="/sign-in"
+                className="text-[#0A400C] hover:text-[#819067] font-medium transition-colors"
+              >
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-[#819067] text-[#819067] hover:bg-[#819067] hover:text-white bg-transparent cursor-pointer"
+                >
+                  Sign In
+                </Button>
+              </Link>
+            )}
 
             <Link href="/listing/add-property">
               <Button
