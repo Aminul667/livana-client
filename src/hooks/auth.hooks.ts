@@ -1,19 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getCurrentUser, loginUser } from "@/Services/AuthServices";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  UseMutationOptions,
+  useQuery,
+} from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 
-export const useUserLogin = () => {
+export const useUserLogin = (
+  options?: UseMutationOptions<any, Error, FieldValues>
+) => {
   return useMutation<any, Error, FieldValues>({
     mutationKey: ["USER_LOGIN"],
     mutationFn: loginUser,
-    onSuccess: () => {
-      toast.success("User login successful.");
-    },
     onError: (error) => {
       toast.error(error.message);
     },
+    ...options, // ✅ spread user-defined callbacks like onSuccess
   });
 };
 

@@ -18,8 +18,9 @@ const mockUser: TUserProfile = {
   location: "Seattle, WA",
 };
 
-const EditProfilePage = ({ params }: ProfilePageProps) => {
-  const profileId = params.id;
+const EditProfilePage = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = await params;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FEFAE0] to-[#B1AB86]/20 py-8 px-4 mt-16">
       <div className="container mx-auto max-w-4xl">
@@ -29,6 +30,7 @@ const EditProfilePage = ({ params }: ProfilePageProps) => {
             Manage your personal information and preferences
           </p>
         </div>
+        {id}
         <EditProfile profile={mockUser} />
       </div>
     </div>

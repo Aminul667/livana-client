@@ -9,7 +9,7 @@ export const userProfileSchema = z.object({
   }),
   location: z.string().min(1, "Location is required"),
   profilePhoto: z.string().optional(),
-  about: z.string().optional(),
+  about: z.string().min(1, "Please write something about you"),
 });
 
 export type TUserProfileFormValues = z.infer<typeof userProfileSchema>;

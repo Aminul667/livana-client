@@ -27,19 +27,18 @@ export const registerUser = async (userData: FieldValues): Promise<any> => {
   }
 };
 
-// export const registerUser = async (userData: FieldValues): Promise<any> => {
-//   try {
-//     const { data } = await axiosInstance.post("/user/create-user", userData);
+export const updateUserProfile = async (formData: FormData): Promise<any> => {
+  try {
+    const { data } = await axiosInstance.post("/user/update-profile", formData);
+    console.log("✅ Response:", data);
+    return data;
+  } catch (error) {
+    const axiosError = error as AxiosError;
 
-//     revalidateTag("users");
-
-//     return data;
-//   } catch (error) {
-//     const axiosError = error as AxiosError;
-
-//     const errorMessage =
-//       (axiosError.response?.data as { message?: string })?.message ||
-//       axiosError.message;
-//     throw new Error(errorMessage);
-//   }
-// };
+    console.error("❌ Axios Error:", axiosError.toJSON?.() || axiosError);
+    throw new Error(
+      (axiosError.response?.data as { message?: string })?.message ||
+        axiosError.message
+    );
+  }
+};

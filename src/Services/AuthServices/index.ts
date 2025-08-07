@@ -1,5 +1,3 @@
-// "use server";
-
 import axiosInstance from "@/lib/AxiosInstance";
 import { AxiosError } from "axios";
 import { FieldValues } from "react-hook-form";

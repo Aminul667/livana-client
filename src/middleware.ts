@@ -10,10 +10,10 @@ export function middleware(request: NextRequest) {
 
   const cookieHeader = request.headers.get("cookie") || "";
   const cookies = parse(cookieHeader);
-  const rawToken = cookies.accessToken;
+  const accessToken = cookies.accessToken;
 
   // ✅ 1. If not logged in
-  if (!rawToken) {
+  if (!accessToken) {
     if (authRoutes.includes(pathname)) {
       return NextResponse.next();
     } else {
@@ -25,10 +25,6 @@ export function middleware(request: NextRequest) {
       );
     }
   }
-
-  const accessToken = rawToken.startsWith("Bearer ")
-    ? rawToken.split(" ")[1]
-    : rawToken;
 
   let decodedToken: any;
 

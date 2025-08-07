@@ -1,5 +1,3 @@
-"use client";
-
 import SignIn from "@/components/Pages/SignIn/SignIn";
 
 const SignInPage = () => {

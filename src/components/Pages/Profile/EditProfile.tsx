@@ -18,12 +18,15 @@ import { useState } from "react";
 import { Controller } from "react-hook-form";
 import PhoneInputWithCountrySelect from "react-phone-number-input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useUpdateUserProfile } from "@/hooks/user.hooks";
 
 const EditProfile = ({
   profile,
 }: {
   profile?: TUserProfileFormValues & { id?: string };
 }) => {
+  const { mutate: handleUpdateProfile, isPending } = useUpdateUserProfile();
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -51,8 +54,13 @@ const EditProfile = ({
   };
 
   const onSubmit = (data: TUserProfileFormValues) => {
-    console.log("Profile", data);
-    alert(JSON.stringify(data, null, 2));
+    const formData = new FormData();
+    if (selectedFile) {
+      formData.append("profilePhoto", selectedFile);
+    }
+
+    formData.append("data", JSON.stringify(data));
+    handleUpdateProfile(formData);
   };
 
   return (
@@ -70,7 +78,7 @@ const EditProfile = ({
           onSubmit={onSubmit}
           className="space-y-4"
         >
-          {({ register, control, formState: { errors } }) => (
+          {({ register, reset, control, formState: { errors } }) => (
             <>
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Profile Photo Section */}
@@ -226,20 +234,19 @@ const EditProfile = ({
               <div className="flex justify-end gap-4 pt-6 border-t border-[#B1AB86]/20">
                 <Button
                   type="button"
-                  //   onClick={handleCancel}
                   variant="outline"
-                  className="border-[#B1AB86] text-[#819067] hover:bg-[#B1AB86]/10 bg-transparent"
-                  //   disabled={isLoading}
+                  className="border-[#B1AB86] text-[#819067] hover:bg-[#B1AB86]/10 bg-transparent cursor-pointer"
+                  onClick={() => reset()}
                 >
-                  <X className="w-4 h-4 mr-2" />
-                  Cancel
+                  <X className="w-4 h-4 mr-1" />
+                  Reset
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-[#819067] hover:bg-[#0A400C] text-white"
+                  className="bg-[#819067] hover:bg-[#0A400C] text-white cursor-pointer"
                 >
                   <Save className="w-4 h-4 mr-2" />
-                  Save Changes
+                  {isPending ? "Updating..." : "Save Changes"}
                 </Button>
               </div>
             </>
