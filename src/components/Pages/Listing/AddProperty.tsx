@@ -7,8 +7,14 @@ import LInputField from "@/components/Shared/Form/LInputField";
 import { LivanaForm } from "@/components/Shared/Form/LivanaForm";
 import LSelectItem from "@/components/Shared/Form/LSelectItem";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import {
   furnishedConstants,
@@ -17,8 +23,10 @@ import {
   purposeConstants,
   rentFrequencyConstants,
 } from "@/constants/listing.constants";
+import { useAddListing } from "@/hooks/listing.hooks";
 import { getCurrentLocation } from "@/lib/utils";
 import { propertySchema, TProperty } from "@/schema/listing.schema";
+import { format } from "date-fns";
 import {
   DollarSign,
   Home,
@@ -31,13 +39,32 @@ import {
   Snowflake,
   Heart,
   Camera,
+  CalendarIcon,
 } from "lucide-react";
-import React from "react";
+import { Controller } from "react-hook-form";
+import { toast } from "sonner";
 
 const AddProperty = () => {
+  const { mutate: handleAddListing, isPending } = useAddListing({
+    onSuccess: () => {
+      toast.success("Listing is added successfully");
+    },
+  });
+
   const onSubmit = (data: TProperty) => {
-    console.log("Property data", data);
-    alert(JSON.stringify(data, null, 2));
+    const formData = new FormData();
+    const { images, ...propertyData } = data;
+
+    console.log("Property data", propertyData);
+    console.log("images", images);
+
+    formData.append("data", JSON.stringify(propertyData));
+
+    images.forEach((image) => {
+      formData.append("images", image);
+    });
+
+    handleAddListing(formData);
   };
   return (
     <>
@@ -97,7 +124,7 @@ const AddProperty = () => {
                       </p>
                     )}
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {/* Price */}
                     <LInputField
                       registerName="price"
@@ -153,6 +180,78 @@ const AddProperty = () => {
                       triggerClass="w-full border-[#B1AB86]/30 focus:border-[#819067] focus:ring-[#819067]/20"
                       contentClass="bg-white border-[#B1AB86]/30"
                       itemClass="text-[#0A400C] hover:bg-[#B1AB86]/10"
+                    />
+
+                    {/* Available Date */}
+                    <Controller
+                      control={control}
+                      name="availableFrom"
+                      render={({ field }) => {
+                        const selectedDate = field.value
+                          ? new Date(field.value)
+                          : undefined;
+
+                        return (
+                          <div className="space-y-2">
+                            <Label
+                              htmlFor="availableFrom"
+                              className="text-sm font-medium text-[#0A400C] flex items-center"
+                            >
+                              Available From *
+                            </Label>
+
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className="w-full justify-start text-left font-normal bg-white border-[#B1AB86]/30 hover:bg-[#B1AB86]/5 text-[#0A400C]"
+                                  type="button"
+                                >
+                                  <CalendarIcon className="mr-2 h-4 w-4 text-[#819067]" />
+                                  {field.value ? (
+                                    field.value
+                                  ) : (
+                                    <span className="text-[#819067]/60">
+                                      Select availability date
+                                    </span>
+                                  )}
+                                </Button>
+                              </PopoverTrigger>
+
+                              <PopoverContent
+                                className="w-auto p-0 bg-white border-[#B1AB86]/30"
+                                align="start"
+                              >
+                                <Calendar
+                                  mode="single"
+                                  selected={selectedDate}
+                                  onSelect={(date) => {
+                                    field.onChange(
+                                      date
+                                        ? format(date, "MMMM do, yyyy")
+                                        : undefined
+                                    );
+                                  }}
+                                  disabled={(date) => date < new Date()}
+                                  initialFocus
+                                  className="text-[#0A400C]"
+                                />
+                              </PopoverContent>
+                            </Popover>
+
+                            <p className="text-xs text-[#819067]">
+                              When will this property be available for
+                              rent/sale?
+                            </p>
+
+                            {errors.availableFrom && (
+                              <p className="text-red-500 text-sm mt-1">
+                                {errors.availableFrom.message}
+                              </p>
+                            )}
+                          </div>
+                        );
+                      }}
                     />
                   </div>
                 </CardContent>
@@ -545,7 +644,7 @@ const AddProperty = () => {
                 type="submit"
                 className="w-full bg-[#819067] hover:bg-[#0A400C] text-white font-semibold py-3 transition-all duration-300 transform cursor-pointer"
               >
-                Save and Preview
+                {isPending ? "Saving..." : "Save and Preview"}
               </Button>
             </>
           );

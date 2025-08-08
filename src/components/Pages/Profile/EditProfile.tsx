@@ -18,14 +18,21 @@ import { useState } from "react";
 import { Controller } from "react-hook-form";
 import PhoneInputWithCountrySelect from "react-phone-number-input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useUpdateUserProfile } from "@/hooks/user.hooks";
+import { useUpdateUserProfile } from "@/hooks/auth.hooks";
+import { useRouter } from "next/navigation";
 
 const EditProfile = ({
   profile,
 }: {
   profile?: TUserProfileFormValues & { id?: string };
 }) => {
-  const { mutate: handleUpdateProfile, isPending } = useUpdateUserProfile();
+  const router = useRouter();
+
+  const { mutate: handleUpdateProfile, isPending } = useUpdateUserProfile({
+    onSuccess: () => {
+      router.push("/profile/f5c43ab5-33a9-4d48-b4ac-26d5be1ae9f1");
+    },
+  });
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);

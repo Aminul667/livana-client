@@ -29,7 +29,7 @@ const ProfilePage = ({ params }: ProfilePageProps) => {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-[#0A400C] mb-2">My Profile</h1>
           <p className="text-[#819067]">
-            Manage your personal information and preferences
+            Manage your personal information and preferences: {profileId}
           </p>
         </div>
         <Profile profile={mockUser} />

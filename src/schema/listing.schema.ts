@@ -30,6 +30,12 @@ export const propertySchema = z.object({
   listingType: listingTypeEnum,
   propertyType: propertyTypeEnum,
   purpose: purposeEnum,
+  availableFrom: z
+    .string()
+    .optional()
+    .refine((val) => val && val.trim().length > 0, {
+      message: "Availability date is required",
+    }),
 
   // Location
   address: requiredString("Address is required"),
