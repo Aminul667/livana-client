@@ -18,3 +18,23 @@ export const addListing = async (formData: FormData): Promise<any> => {
     );
   }
 };
+
+export const getAllListing = async (queryParams: Record<string, string>) => {
+  console.log("queryParams", queryParams);
+  try {
+    const { data } = await axiosInstance.get("/listing", {
+      params: queryParams,
+    });
+
+    // return data.data;
+    return data;
+  } catch (error) {
+    const axiosError = error as AxiosError;
+
+    console.error("❌ Axios Error:", axiosError.toJSON?.() || axiosError);
+    throw new Error(
+      (axiosError.response?.data as { message?: string })?.message ||
+        axiosError.message
+    );
+  }
+};

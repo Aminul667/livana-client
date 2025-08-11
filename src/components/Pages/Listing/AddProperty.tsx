@@ -55,9 +55,6 @@ const AddProperty = () => {
     const formData = new FormData();
     const { images, ...propertyData } = data;
 
-    console.log("Property data", propertyData);
-    console.log("images", images);
-
     formData.append("data", JSON.stringify(propertyData));
 
     images.forEach((image) => {

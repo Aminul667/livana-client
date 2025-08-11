@@ -1,8 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { addListing } from "@/Services/ListingServices";
+import { addListing, getAllListing } from "@/Services/ListingServices";
 import { IAddListingResponse } from "@/types/listing.types";
-import { useMutation, UseMutationOptions } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  QueryKey,
+  useMutation,
+  UseMutationOptions,
+  useQuery,
+} from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { useMemo } from "react";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -18,5 +25,43 @@ export const useAddListing = (
       toast.error(message);
     },
     ...options,
+  });
+};
+
+// export const useGetAllListings = (queryParams: Record<string, string>) => {
+//   return useQuery({
+//     queryKey: ["get_listings", queryParams],
+//     queryFn: async () => await getAllListing(queryParams),
+//   });
+// };
+
+type ParamValue = string | number | boolean | undefined | null;
+export type ListingsParams = Record<string, ParamValue>;
+type AnyObj = Record<string, any>;
+
+// Helper: convert mixed param values to Record<string, string> for axios { params }
+const toStringParams = (p: ListingsParams) => {
+  const out: Record<string, string> = {};
+  for (const [k, v] of Object.entries(p)) {
+    if (v === undefined || v === null || v === "") continue;
+    out[k] = String(v);
+  }
+  return out;
+};
+
+export const useGetAllListing = <TData = AnyObj>(
+  params: ListingsParams = {}
+) => {
+  const stringParams = useMemo(() => toStringParams(params), [params]);
+
+  return useQuery({
+    queryKey: ["listings", stringParams], // cache per filter set
+    queryFn: () => getAllListing(stringParams),
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    retry: 1,
+    placeholderData: keepPreviousData, // v5 replacement of keepPreviousData
+    // If your API returns { data, meta }, unwrap here; otherwise return raw
+    select: (res: AnyObj) => res?.data ?? res,
   });
 };
