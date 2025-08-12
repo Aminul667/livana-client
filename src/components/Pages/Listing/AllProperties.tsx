@@ -1,5 +1,6 @@
 "use client";
 
+import PropertyCard from "@/components/Shared/UI/PropertyCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,19 +15,29 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import {
+  checkboxOptions,
+  furnishedConstants,
+  months,
+  propertyTypeConstants,
+  purposeConstants,
+  rentFrequencyConstants,
+} from "@/constants/listing.constants";
 import useDebounce from "@/hooks/debounce.hook";
 import { useGetAllListing } from "@/hooks/listing.hooks";
 import { useListingFilters } from "@/hooks/listingFilters.hook";
+import { TCardProperty } from "@/types/listing.types";
 import { Grid3X3, List, Search, SlidersHorizontal } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 type ViewMode = "grid" | "list";
 
 const PRICE = { MIN: 0, MAX: 1_000_000, STEP: 50 } as const;
+const BEDROOM = { MIN: 0, MAX: 100, STEP: 1 } as const;
 
 const AllProperties = () => {
   const { params, setParam, setRange, resetAll } = useListingFilters();
-  const { data, isFetching, error } = useGetAllListing(params);
+  const { data: propertyData, isFetching, error } = useGetAllListing(params);
 
   // UI-only state
   const [showFilters, setShowFilters] = useState(false);
@@ -69,7 +80,35 @@ const AllProperties = () => {
   }, [debouncedRange, urlRange, setRange]);
 
   const handleRangeChange = useCallback((value: number[]) => {
-    setRangeDraft(value as [number, number]); // only local UI change; URL updates via debounce
+    setRangeDraft(value as [number, number]);
+  }, []);
+
+  // ---- Bedroom range (debounced to URL)
+  const urlRangeBedroom = useMemo<[number, number]>(
+    () => [
+      params.minBedrooms ?? BEDROOM.MIN,
+      params.maxBedrooms ?? BEDROOM.MAX,
+    ],
+    [params.minBedrooms, params.maxBedrooms]
+  );
+
+  const [rangeDraftBedroom, setRangeDraftBedroom] =
+    useState<[number, number]>(urlRangeBedroom);
+  useEffect(() => setRangeDraftBedroom(urlRangeBedroom), [urlRangeBedroom]);
+
+  // Debounce the draft range before writing to URL
+  const debouncedRangeBedroom = useDebounce(rangeDraftBedroom, 350);
+
+  useEffect(() => {
+    const [dMin, dMax] = debouncedRangeBedroom;
+    const [uMin, uMax] = urlRangeBedroom;
+    if (dMin !== uMin || dMax !== uMax) {
+      setRange("minBedrooms", "maxBedrooms", [dMin, dMax]);
+    }
+  }, [debouncedRangeBedroom, urlRangeBedroom, setRange]);
+
+  const handleRangeChangeBedroom = useCallback((value: number[]) => {
+    setRangeDraftBedroom(value as [number, number]);
   }, []);
 
   // ---- Property type
@@ -79,7 +118,35 @@ const AllProperties = () => {
     [setParam]
   );
 
-  console.log("data", data);
+  // purpose
+  const purpose = params.purpose ?? "";
+  const handlePurposeChange = useCallback(
+    (val: string) => setParam("purpose", val || undefined),
+    [setParam]
+  );
+
+  // furnished
+  const furnished = params.furnished ?? "";
+  const handleFurnishedChange = useCallback(
+    (val: string) => setParam("furnished", val || undefined),
+    [setParam]
+  );
+
+  // rentFrequency
+  const rentFrequency = params.rentFrequency ?? "";
+  const handleRentFrequencyChange = useCallback(
+    (val: string) => setParam("rentFrequency", val || undefined),
+    [setParam]
+  );
+
+  // rentFrequency
+  const availableMonth = params.availableMonth ?? "";
+  const handleAvailableMonthChange = useCallback(
+    (val: string) => setParam("availableMonth", val || undefined),
+    [setParam]
+  );
+
+  console.log("data", propertyData);
 
   return (
     <>
@@ -204,32 +271,7 @@ const AllProperties = () => {
               </Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Bedrooms */}
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-[#0A400C]">
-                  Min Bedrooms
-                </Label>
-                <Select
-                //   value={filters.bedrooms}
-                //   onValueChange={(value) =>
-                //     handleFilterChange("bedrooms", value)
-                //   }
-                >
-                  <SelectTrigger className="bg-white border-[#B1AB86]/30">
-                    <SelectValue placeholder="Any" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white border-[#B1AB86]/30">
-                    <SelectItem value="0">Studio</SelectItem>
-                    <SelectItem value="1">1+</SelectItem>
-                    <SelectItem value="2">2+</SelectItem>
-                    <SelectItem value="3">3+</SelectItem>
-                    <SelectItem value="4">4+</SelectItem>
-                    <SelectItem value="5">5+</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
               {/* Property Type */}
               <div className="space-y-2">
                 <Label className="text-sm font-medium text-[#0A400C]">
@@ -239,16 +281,75 @@ const AllProperties = () => {
                   value={propertyType}
                   onValueChange={handlePropertyTypeChange}
                 >
-                  <SelectTrigger className="bg-white border-[#B1AB86]/30">
+                  <SelectTrigger className="bg-white border-[#B1AB86]/30 w-full">
                     <SelectValue placeholder="Any" />
                   </SelectTrigger>
                   <SelectContent className="bg-white border-[#B1AB86]/30">
-                    <SelectItem value="flat">Flat</SelectItem>
-                    <SelectItem value="APARTMENT">Apartment</SelectItem>
-                    <SelectItem value="HOUSE">House</SelectItem>
-                    <SelectItem value="TOWNHOUSE">Townhouse</SelectItem>
-                    <SelectItem value="UNIT">Unit</SelectItem>
-                    <SelectItem value="STUDIO">Studio</SelectItem>
+                    {propertyTypeConstants.map((item, index) => (
+                      <SelectItem key={index} value={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* purpose */}
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-[#0A400C]">
+                  Purpose
+                </Label>
+                <Select value={purpose} onValueChange={handlePurposeChange}>
+                  <SelectTrigger className="bg-white border-[#B1AB86]/30 w-full">
+                    <SelectValue placeholder="Any" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border-[#B1AB86]/30">
+                    {purposeConstants.map((item, index) => (
+                      <SelectItem key={index} value={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* furnished */}
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-[#0A400C]">
+                  Furnished
+                </Label>
+                <Select value={furnished} onValueChange={handleFurnishedChange}>
+                  <SelectTrigger className="bg-white border-[#B1AB86]/30 w-full">
+                    <SelectValue placeholder="Any" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border-[#B1AB86]/30">
+                    {furnishedConstants.map((item, index) => (
+                      <SelectItem key={index} value={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* rentFrequency */}
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-[#0A400C]">
+                  Rent Frequency
+                </Label>
+                <Select
+                  value={rentFrequency}
+                  onValueChange={handleRentFrequencyChange}
+                >
+                  <SelectTrigger className="bg-white border-[#B1AB86]/30 w-full">
+                    <SelectValue placeholder="Any" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border-[#B1AB86]/30">
+                    {rentFrequencyConstants.map((item, index) => (
+                      <SelectItem key={index} value={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -272,26 +373,63 @@ const AllProperties = () => {
 
             {/* Features */}
             <div className="mt-6">
+              {/* availableMonth */}
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-[#0A400C]">
+                  Month
+                </Label>
+                <Select
+                  value={availableMonth}
+                  onValueChange={handleAvailableMonthChange}
+                >
+                  <SelectTrigger className="bg-white border-[#B1AB86]/30 w-full">
+                    <SelectValue placeholder="Any" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border-[#B1AB86]/30">
+                    {months.map((item, index) => (
+                      <SelectItem key={index} value={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Price Range */}
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-[#0A400C]">
+                  Bedroom Range: ${rangeDraftBedroom[0].toLocaleString()} – $
+                  {rangeDraftBedroom[1].toLocaleString()}
+                </Label>
+                <Slider
+                  value={rangeDraftBedroom}
+                  min={BEDROOM.MIN}
+                  max={BEDROOM.MAX}
+                  step={BEDROOM.STEP}
+                  className="w-full"
+                  onValueChange={handleRangeChangeBedroom}
+                />
+              </div>
+
+              {/* boolean */}
               <Label className="text-sm font-medium text-[#0A400C] mb-3 block">
                 Features
               </Label>
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-                {[
-                  { key: "hasParking", label: "Parking" },
-                  { key: "hasBalcony", label: "Balcony" },
-                ].map((f) => {
-                  const checked = params[f.key as keyof typeof params] === true;
+                {checkboxOptions.map((f) => {
+                  const checked =
+                    params[f.name as keyof typeof params] === true;
                   return (
-                    <div key={f.key} className="flex items-center space-x-2">
+                    <div key={f.name} className="flex items-center space-x-2">
                       <Checkbox
-                        id={f.key}
+                        id={f.name}
                         checked={checked}
                         onCheckedChange={(state) =>
-                          setParam(f.key, state === true ? true : undefined)
+                          setParam(f.name, state === true ? true : undefined)
                         }
                       />
                       <Label
-                        htmlFor={f.key}
+                        htmlFor={f.name}
                         className="text-sm text-[#0A400C] cursor-pointer"
                       >
                         {f.label}
@@ -303,6 +441,44 @@ const AllProperties = () => {
             </div>
           </CardContent>
         </Card>
+      )}
+
+      {propertyData?.data.length === 0 ? (
+        <Card className="border-[#B1AB86]/30 bg-white">
+          <CardContent className="p-12 text-center">
+            <div className="text-[#819067] mb-4">
+              <Search className="w-16 h-16 mx-auto mb-4 opacity-50" />
+              <h3 className="text-xl font-semibold text-[#0A400C] mb-2">
+                No properties found
+              </h3>
+              <p>Try adjusting your search criteria or filters</p>
+            </div>
+            <Button
+              className="bg-[#819067] hover:bg-[#0A400C] text-white"
+              onClick={resetAll}
+            >
+              Clear Filters
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
+        <>
+          <div
+            className={
+              viewMode === "grid"
+                ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                : "space-y-4"
+            }
+          >
+            {propertyData?.data.map((property: TCardProperty) => (
+              <PropertyCard
+                key={property.id}
+                property={property}
+                viewMode={viewMode}
+              />
+            ))}
+          </div>
+        </>
       )}
     </>
   );

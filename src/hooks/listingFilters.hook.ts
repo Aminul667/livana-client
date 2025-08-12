@@ -21,14 +21,33 @@ export const useListingFilters = () => {
       // price range
       minMonthlyRent: toNum(sp.get("minMonthlyRent")),
       maxMonthlyRent: toNum(sp.get("maxMonthlyRent")),
+      minBedrooms: toNum(sp.get("minBedrooms")),
+      maxBedrooms: toNum(sp.get("maxBedrooms")),
+
+      // location
+      lat: toNum(sp.get("lat")),
+      lon: toNum(sp.get("lon")),
+      maxDistanceMeters: toNum(sp.get("maxDistanceMeters")),
+
       // toggles
       hasParking: toBool(sp.get("hasParking")),
+      hasLift: toBool(sp.get("hasLift")),
       hasBalcony: toBool(sp.get("hasBalcony")),
+      heating: toBool(sp.get("heating")),
+      cooling: toBool(sp.get("cooling")),
+      petFriendly: toBool(sp.get("petFriendly")),
+      internetIncluded: toBool(sp.get("internetIncluded")),
+
       // text search
       searchTerm: toStr(sp.get("searchTerm")),
+
       // select
-      minBathrooms: toNum(sp.get("minBathrooms")),
+      // minBathrooms: toNum(sp.get("minBathrooms")),
       propertyType: toStr(sp.get("propertyType")),
+      purpose: toStr(sp.get("purpose")),
+      furnished: toStr(sp.get("furnished")),
+      rentFrequency: toStr(sp.get("rentFrequency")),
+      availableMonth: toStr(sp.get("availableMonth")),
     };
   }, [searchParams]);
 
