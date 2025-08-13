@@ -16,18 +16,12 @@ const PropertyCard = ({
   property: TCardProperty;
   viewMode: TViewMode;
 }) => {
-  //   const formatPrice = (property: Property) => {
-  //     const price = new Intl.NumberFormat("en-US", {
-  //       style: "currency",
-  //       currency: "USD",
-  //       maximumFractionDigits: 0,
-  //     }).format(property.price)
-
-  //     if (property.listingType === "rent" && property.rentFrequency) {
-  //       return `${price}/${property.rentFrequency === "monthly" ? "mo" : "yr"}`
-  //     }
-  //     return price
-  //   }
+    // const formatPrice = (property: TCardProperty) => {
+    //   if (property.listingType === "rent" && property.rentFrequency) {
+    //     return `${price}/${property.rentFrequency === "monthly" ? "mo" : "yr"}`
+    //   }
+    //   return price
+    // }
 
   if (viewMode === "list") {
     return (
@@ -84,7 +78,7 @@ const PropertyCard = ({
                   </p>
                 </div>
                 <div className="text-2xl font-bold text-[#0A400C]">
-                  {property.price}
+                  {property.price} / mo
                 </div>
               </div>
 

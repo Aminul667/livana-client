@@ -3,7 +3,6 @@ import { addListing, getAllListing } from "@/Services/ListingServices";
 import { IAddListingResponse } from "@/types/listing.types";
 import {
   keepPreviousData,
-  QueryKey,
   useMutation,
   UseMutationOptions,
   useQuery,
@@ -27,13 +26,6 @@ export const useAddListing = (
     ...options,
   });
 };
-
-// export const useGetAllListings = (queryParams: Record<string, string>) => {
-//   return useQuery({
-//     queryKey: ["get_listings", queryParams],
-//     queryFn: async () => await getAllListing(queryParams),
-//   });
-// };
 
 type ParamValue = string | number | boolean | undefined | null;
 export type ListingsParams = Record<string, ParamValue>;
@@ -60,7 +52,7 @@ export const useGetAllListing = <TData = AnyObj>(
     staleTime: 5 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
     retry: 1,
-    placeholderData: keepPreviousData, // v5 replacement of keepPreviousData
+    placeholderData: keepPreviousData,
     // If your API returns { data, meta }, unwrap here; otherwise return raw
     select: (res: AnyObj) => res?.data ?? res,
   });

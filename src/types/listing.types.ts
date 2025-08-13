@@ -1,4 +1,5 @@
 import { TProperty } from "@/schema/listing.schema";
+import { TUserProfile } from "./user.types";
 
 export type TViewMode = "grid" | "list";
 
@@ -30,3 +31,38 @@ export interface IAddListingResponse {
     updatedAt: string;
   };
 }
+
+export type TPropertyDetails = TCardProperty & {
+  amenities: string[];
+  availableFrom: string;
+  cooling: boolean;
+  createdAt: string;
+  depositAmount?: number;
+  floorNumber: number;
+  furnished: string;
+  hasBalcony: boolean;
+  hasLift: boolean;
+  hasParking: boolean;
+  heating: boolean;
+  internetIncluded: boolean;
+  latitude: number;
+  longitude: number;
+  maintenanceFee?: number;
+  petFriendly: boolean;
+  postalCode: string;
+  purpose: string;
+  rentFrequency?: string;
+  totalFloors?: string;
+  updatedAt: string;
+  userId: string;
+  videoUrl?: string;
+  user: {
+    email: string;
+    id: string;
+    profile: Partial<TUserProfile>;
+  };
+  images: {
+    id: string;
+    url: string;
+  };
+};
