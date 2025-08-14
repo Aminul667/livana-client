@@ -32,6 +32,11 @@ export interface IAddListingResponse {
   };
 }
 
+export type TImages = {
+  id: string;
+  url: string;
+};
+
 export type TPropertyDetails = TCardProperty & {
   amenities: string[];
   availableFrom: string;
@@ -61,8 +66,5 @@ export type TPropertyDetails = TCardProperty & {
     id: string;
     profile: Partial<TUserProfile>;
   };
-  images: {
-    id: string;
-    url: string;
-  };
+  images: TImages[];
 };

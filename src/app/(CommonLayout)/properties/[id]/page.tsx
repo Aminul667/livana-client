@@ -9,6 +9,10 @@ const SinglePropertyPage = async ({
   const { id } = await params;
 
   const data = await getListingById(id);
+
+  if(!data){
+    return <h2>Loading...</h2>
+  }
   return (
     <div className="mt-16">
       <PropertyDetails property={data} />
