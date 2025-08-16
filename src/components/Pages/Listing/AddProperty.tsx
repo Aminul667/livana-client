@@ -41,13 +41,17 @@ import {
   Camera,
   CalendarIcon,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Controller } from "react-hook-form";
 import { toast } from "sonner";
 
 const AddProperty = () => {
+  const router = useRouter();
+
   const { mutate: handleAddListing, isPending } = useAddListing({
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success("Listing is added successfully");
+      router.push(`/listing/preview/${data?.data.id}`);
     },
   });
 

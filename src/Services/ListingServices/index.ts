@@ -53,3 +53,19 @@ export const getListingById = async (id: string) => {
     );
   }
 };
+
+export const getDraftListingById = async (id: string) => {
+  try {
+    const { data } = await axiosInstance.get(`/listing/draft/${id}`);
+
+    return data.data;
+  } catch (error) {
+    const axiosError = error as AxiosError;
+
+    console.error("❌ Axios Error:", axiosError.toJSON?.() || axiosError);
+    throw new Error(
+      (axiosError.response?.data as { message?: string })?.message ||
+        axiosError.message
+    );
+  }
+};

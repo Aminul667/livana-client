@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Bath, Bed, Heart, MapPin, Square } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const properties = [
   {
@@ -157,13 +158,15 @@ const FeaturedProperties = () => {
         </div>
 
         <div className="text-center">
-          <Button
-            variant="outline"
-            size="lg"
-            className="border-[#819067] text-[#819067] hover:bg-[#819067] hover:text-white px-8 py-3 bg-transparent"
-          >
-            View All Properties
-          </Button>
+          <Link href="/properties">
+            <Button
+              variant="outline"
+              size="lg"
+              className="border-[#819067] text-[#819067] hover:bg-[#819067] hover:text-white px-8 py-3 bg-transparent cursor-pointer"
+            >
+              View All Properties
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

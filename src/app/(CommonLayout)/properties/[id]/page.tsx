@@ -13,6 +13,7 @@ const SinglePropertyPage = async ({
   if(!data){
     return <h2>Loading...</h2>
   }
+  
   return (
     <div className="mt-16">
       <PropertyDetails property={data} />
