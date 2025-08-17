@@ -1,0 +1,77 @@
+import { IPricingPlan } from "@/types/pricing.type";
+import { Crown, Star, Zap } from "lucide-react";
+
+export const pricingPlans: IPricingPlan[] = [
+  {
+    id: "basic",
+    name: "Basic Listing",
+    price: 29,
+    duration: "30 days",
+    description:
+      "Perfect for individual property owners looking to list their property quickly and affordably.",
+    features: [
+      "Property listing for 30 days",
+      "Up to 10 high-quality photos",
+      "Basic property description",
+      "Contact form for inquiries",
+      "Mobile-responsive listing",
+      "Search engine visibility",
+      "Email notifications",
+      "Basic analytics dashboard",
+    ],
+    icon: Star,
+    buttonText: "Get Started",
+  },
+  {
+    id: "featured",
+    name: "Featured Listing",
+    price: 79,
+    originalPrice: 99,
+    duration: "60 days",
+    description:
+      "Boost your property's visibility with premium placement and enhanced features.",
+    features: [
+      "Everything in Basic Listing",
+      "Featured placement in search results",
+      "Property listing for 60 days",
+      "Up to 25 professional photos",
+      "Video tour integration",
+      "Priority customer support",
+      "Advanced analytics & insights",
+      "Social media promotion",
+      "Highlighted with 'Featured' badge",
+      "Top of category placement",
+    ],
+    popular: true,
+    icon: Zap,
+    buttonText: "Go Featured",
+    savings: "Save $20",
+  },
+  {
+    id: "premium",
+    name: "Premium Plus",
+    price: 149,
+    originalPrice: 199,
+    duration: "90 days",
+    description:
+      "Maximum exposure with premium features and dedicated support for serious sellers.",
+    features: [
+      "Everything in Featured Listing",
+      "Property listing for 90 days",
+      "Unlimited professional photos",
+      "Virtual 3D tour integration",
+      "Dedicated account manager",
+      "Professional photography service",
+      "Premium listing design template",
+      "Multi-platform syndication",
+      "Advanced lead management",
+      "Custom branding options",
+      "Priority placement guarantee",
+      "Detailed market analysis report",
+    ],
+    premium: true,
+    icon: Crown,
+    buttonText: "Go Premium",
+    savings: "Save $50",
+  },
+];

@@ -123,4 +123,7 @@ setEnumErrorMessage(
 );
 setEnumErrorMessage(furnishedStatusEnum, "Select a valid status");
 
+export const propertyEditSchema = propertySchema.partial();
+
 export type TProperty = z.infer<typeof propertySchema>;
+export type TEditProperty = z.infer<typeof propertyEditSchema>;
