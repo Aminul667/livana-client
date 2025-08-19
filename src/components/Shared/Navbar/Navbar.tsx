@@ -10,8 +10,7 @@ import { useState } from "react";
 
 const Navbar = () => {
   const router = useRouter();
-  const { data: user, isLoading, isError } = useCurrentUser();
-  console.log("user from navbar", user);
+  const { data: user, isLoading } = useCurrentUser();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 

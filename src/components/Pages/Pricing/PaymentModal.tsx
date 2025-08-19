@@ -1,31 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import {
-  CreditCard,
-  Lock,
-  Check,
-  Calendar,
-  User,
-  Mail,
-  Phone,
-  Loader2,
-  Shield,
-} from "lucide-react";
-import { IPaymentForm, IPricingPlan } from "@/types/pricing.type";
+import { Check, Mail, Phone } from "lucide-react";
+import { IPricingPlan } from "@/types/pricing.type";
+import { useCurrentUser } from "@/hooks/auth.hooks";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import StripeForm from "./StripeForm";
+import envConfig from "@/config/envConfig";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -34,124 +27,16 @@ interface PaymentModalProps {
   selectedPlan: IPricingPlan | null;
 }
 
-export default function PaymentModal({
-  isOpen,
-  onClose,
-  onPaymentComplete,
-  selectedPlan,
-}: PaymentModalProps) {
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [paymentForm, setPaymentForm] = useState<IPaymentForm>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    cardNumber: "",
-    expiryDate: "",
-    cvv: "",
-    cardholderName: "",
-    agreeToTerms: false,
-  });
+const stripe = loadStripe(envConfig.stripePublicKey as string);
+
+const PaymentModal = ({ isOpen, onClose, selectedPlan }: PaymentModalProps) => {
+  const { data: user, isLoading } = useCurrentUser();
 
   if (!selectedPlan) return null;
 
   const IconComponent = selectedPlan.icon;
-  const tax = selectedPlan.price * 0.08; // 8% tax
+  const tax = selectedPlan.price * 0.08;
   const total = selectedPlan.price + tax;
-
-  const handleInputChange = (
-    field: keyof IPaymentForm,
-    value: string | boolean
-  ) => {
-    setPaymentForm((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const formatCardNumber = (value: string) => {
-    const v = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
-    const matches = v.match(/\d{4,16}/g);
-    const match = (matches && matches[0]) || "";
-    const parts = [];
-    for (let i = 0, len = match.length; i < len; i += 4) {
-      parts.push(match.substring(i, i + 4));
-    }
-    if (parts.length) {
-      return parts.join(" ");
-    } else {
-      return v;
-    }
-  };
-
-  const formatExpiryDate = (value: string) => {
-    const v = value.replace(/\D/g, "");
-    if (v.length >= 2) {
-      return `${v.slice(0, 2)}/${v.slice(2, 4)}`;
-    }
-    return v;
-  };
-
-  const handleCardNumberChange = (value: string) => {
-    const formatted = formatCardNumber(value);
-    if (formatted.replace(/\s/g, "").length <= 16) {
-      handleInputChange("cardNumber", formatted);
-    }
-  };
-
-  const handleExpiryChange = (value: string) => {
-    const formatted = formatExpiryDate(value);
-    if (formatted.length <= 5) {
-      handleInputChange("expiryDate", formatted);
-    }
-  };
-
-  const validateForm = () => {
-    return (
-      paymentForm.firstName &&
-      paymentForm.lastName &&
-      paymentForm.email &&
-      paymentForm.phone &&
-      paymentForm.cardNumber.replace(/\s/g, "").length === 16 &&
-      paymentForm.expiryDate.length === 5 &&
-      paymentForm.cvv.length >= 3 &&
-      paymentForm.cardholderName &&
-      paymentForm.agreeToTerms
-    );
-  };
-
-  const handlePayment = async () => {
-    if (!validateForm()) return;
-
-    setIsProcessing(true);
-
-    try {
-      // Simulate payment processing
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-
-      // In a real app, you would integrate with a payment processor like Stripe
-      const paymentData = {
-        planId: selectedPlan.id,
-        planName: selectedPlan.name,
-        amount: total,
-        customerInfo: {
-          name: `${paymentForm.firstName} ${paymentForm.lastName}`,
-          email: paymentForm.email,
-          phone: paymentForm.phone,
-        },
-        paymentMethod: {
-          last4: paymentForm.cardNumber.slice(-4),
-          cardType: "Visa", // You would detect this from the card number
-        },
-        transactionId: `txn_${Date.now()}`,
-        timestamp: new Date().toISOString(),
-      };
-
-      onPaymentComplete(paymentData);
-    } catch (error) {
-      console.error("Payment failed:", error);
-      // Handle payment error
-    } finally {
-      setIsProcessing(false);
-    }
-  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -195,16 +80,13 @@ export default function PaymentModal({
                     htmlFor="firstName"
                     className="text-sm font-medium text-[#0A400C]"
                   >
-                    First Name *
+                    First Name
                   </Label>
                   <Input
                     id="firstName"
-                    value={paymentForm.firstName}
-                    onChange={(e) =>
-                      handleInputChange("firstName", e.target.value)
-                    }
+                    value={user.profile.firstName}
                     className="bg-white border-[#B1AB86]/30 focus:border-[#819067]"
-                    placeholder="John"
+                    disabled
                   />
                 </div>
                 <div className="space-y-2">
@@ -212,16 +94,13 @@ export default function PaymentModal({
                     htmlFor="lastName"
                     className="text-sm font-medium text-[#0A400C]"
                   >
-                    Last Name *
+                    Last Name
                   </Label>
                   <Input
                     id="lastName"
-                    value={paymentForm.lastName}
-                    onChange={(e) =>
-                      handleInputChange("lastName", e.target.value)
-                    }
+                    value={user.profile.lastName}
                     className="bg-white border-[#B1AB86]/30 focus:border-[#819067]"
-                    placeholder="Doe"
+                    disabled
                   />
                 </div>
               </div>
@@ -231,19 +110,16 @@ export default function PaymentModal({
                     htmlFor="email"
                     className="text-sm font-medium text-[#0A400C]"
                   >
-                    Email Address *
+                    Email Address
                   </Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#819067] w-4 h-4" />
                     <Input
                       id="email"
                       type="email"
-                      value={paymentForm.email}
-                      onChange={(e) =>
-                        handleInputChange("email", e.target.value)
-                      }
+                      value={user.email}
                       className="pl-10 bg-white border-[#B1AB86]/30 focus:border-[#819067]"
-                      placeholder="john@example.com"
+                      disabled
                     />
                   </div>
                 </div>
@@ -252,18 +128,15 @@ export default function PaymentModal({
                     htmlFor="phone"
                     className="text-sm font-medium text-[#0A400C]"
                   >
-                    Phone Number *
+                    Phone Number
                   </Label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#819067] w-4 h-4" />
                     <Input
                       id="phone"
-                      value={paymentForm.phone}
-                      onChange={(e) =>
-                        handleInputChange("phone", e.target.value)
-                      }
+                      value={user.profile?.phone}
                       className="pl-10 bg-white border-[#B1AB86]/30 focus:border-[#819067]"
-                      placeholder="+1 (555) 123-4567"
+                      disabled
                     />
                   </div>
                 </div>
@@ -271,114 +144,13 @@ export default function PaymentModal({
             </div>
 
             {/* Payment Information */}
-            <div>
-              <h3 className="text-lg font-semibold text-[#0A400C] mb-4 flex items-center">
-                <CreditCard className="w-5 h-5 mr-2 text-[#819067]" />
-                Payment Information
-              </h3>
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="cardholderName"
-                    className="text-sm font-medium text-[#0A400C]"
-                  >
-                    Cardholder Name *
-                  </Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#819067] w-4 h-4" />
-                    <Input
-                      id="cardholderName"
-                      value={paymentForm.cardholderName}
-                      onChange={(e) =>
-                        handleInputChange("cardholderName", e.target.value)
-                      }
-                      className="pl-10 bg-white border-[#B1AB86]/30 focus:border-[#819067]"
-                      placeholder="John Doe"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="cardNumber"
-                    className="text-sm font-medium text-[#0A400C]"
-                  >
-                    Card Number *
-                  </Label>
-                  <div className="relative">
-                    <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#819067] w-4 h-4" />
-                    <Input
-                      id="cardNumber"
-                      value={paymentForm.cardNumber}
-                      onChange={(e) => handleCardNumberChange(e.target.value)}
-                      className="pl-10 bg-white border-[#B1AB86]/30 focus:border-[#819067]"
-                      placeholder="1234 5678 9012 3456"
-                      maxLength={19}
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="expiryDate"
-                      className="text-sm font-medium text-[#0A400C]"
-                    >
-                      Expiry Date *
-                    </Label>
-                    <div className="relative">
-                      <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#819067] w-4 h-4" />
-                      <Input
-                        id="expiryDate"
-                        value={paymentForm.expiryDate}
-                        onChange={(e) => handleExpiryChange(e.target.value)}
-                        className="pl-10 bg-white border-[#B1AB86]/30 focus:border-[#819067]"
-                        placeholder="MM/YY"
-                        maxLength={5}
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="cvv"
-                      className="text-sm font-medium text-[#0A400C]"
-                    >
-                      CVV *
-                    </Label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#819067] w-4 h-4" />
-                      <Input
-                        id="cvv"
-                        value={paymentForm.cvv}
-                        onChange={(e) =>
-                          handleInputChange(
-                            "cvv",
-                            e.target.value.replace(/\D/g, "")
-                          )
-                        }
-                        className="pl-10 bg-white border-[#B1AB86]/30 focus:border-[#819067]"
-                        placeholder="123"
-                        maxLength={4}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Security Notice */}
-              <div className="bg-[#FEFAE0]/50 border border-[#B1AB86]/30 rounded-lg p-4 mt-4">
-                <div className="flex items-center gap-3">
-                  <Shield className="w-5 h-5 text-green-600" />
-                  <div>
-                    <h4 className="text-sm font-semibold text-[#0A400C]">
-                      Secure Payment
-                    </h4>
-                    <p className="text-xs text-[#819067]">
-                      Your payment information is encrypted and secure. We never
-                      store your card details.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Elements stripe={stripe}>
+              <StripeForm
+                planId={selectedPlan.id}
+                price={selectedPlan.price}
+                total={total}
+              />
+            </Elements>
           </div>
 
           {/* Right Column - Order Summary */}
@@ -496,64 +268,9 @@ export default function PaymentModal({
             </div>
           </div>
         </div>
-
-        {/* Terms Agreement */}
-        <div className="flex items-start gap-3 p-4 bg-[#FEFAE0]/50 border border-[#B1AB86]/30 rounded-lg mb-6">
-          <input
-            type="checkbox"
-            id="agreeToTerms"
-            checked={paymentForm.agreeToTerms}
-            onChange={(e) =>
-              handleInputChange("agreeToTerms", e.target.checked)
-            }
-            className="mt-1"
-          />
-          <label
-            htmlFor="agreeToTerms"
-            className="text-sm text-[#0A400C] cursor-pointer"
-          >
-            I agree to the{" "}
-            <a href="#" className="text-[#819067] hover:underline">
-              Terms of Service
-            </a>{" "}
-            and{" "}
-            <a href="#" className="text-[#819067] hover:underline">
-              Privacy Policy
-            </a>
-            . I understand that my listing will be published for{" "}
-            {selectedPlan.duration} and I can cancel or modify it at any time.
-          </label>
-        </div>
-
-        {/* Navigation Buttons */}
-        <div className="flex justify-between items-center pt-6 border-t border-[#B1AB86]/30">
-          <Button
-            variant="outline"
-            onClick={onClose}
-            className="border-gray-300 text-gray-600 hover:bg-gray-50 bg-transparent"
-          >
-            Cancel
-          </Button>
-
-          <Button
-            onClick={handlePayment}
-            disabled={!validateForm() || isProcessing}
-            className="bg-[#819067] hover:bg-[#0A400C] text-white disabled:opacity-50 min-w-[120px]"
-          >
-            {isProcessing ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Processing...
-              </>
-            ) : (
-              <>
-                <Lock className="w-4 h-4 mr-2" />
-                Pay ${total.toFixed(2)}
-              </>
-            )}
-          </Button>
-        </div>
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default PaymentModal;

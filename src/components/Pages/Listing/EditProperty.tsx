@@ -44,9 +44,7 @@ import {
 import { Controller } from "react-hook-form";
 
 const EditProperty = ({ property }: { property: TEditProperty }) => {
-    console.log("Edit", property);
-
-
+  console.log("Edit", property);
 
   const onSubmit = (data: TEditProperty) => {
     console.log("edit", data);
