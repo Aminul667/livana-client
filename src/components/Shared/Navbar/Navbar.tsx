@@ -2,11 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/auth.hooks";
-import { logout } from "@/Services/AuthServices";
+import { TAvatarDropdownProps } from "@/types/user.types";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import UserAvatar from "./UserAvatar";
 
 const Navbar = () => {
   const router = useRouter();
@@ -14,9 +15,11 @@ const Navbar = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleLogout = async () => {
-    await logout();
-    router.push("/sign-in"); // or redirect
+  const userAvatarData: TAvatarDropdownProps = {
+    id: user?.id,
+    name: `${user?.profile.firstName} ${user?.profile.lastName}`,
+    email: user?.email,
+    avatar: user?.profile.profilePhoto,
   };
 
   return (
@@ -54,15 +57,17 @@ const Navbar = () => {
 
           {/* Desktop Auth & Actions */}
           <div className="hidden lg:flex items-center space-x-4">
-            {user ? (
+            <Link href="/listing/add-property">
               <Button
-                variant="outline"
                 size="sm"
-                className="border-[#819067] text-[#819067] hover:bg-[#819067] hover:text-white bg-transparent cursor-pointer"
-                onClick={handleLogout}
+                className="bg-[#819067] hover:bg-[#0A400C] text-white cursor-pointer"
               >
-                Sign out
+                List Your Property
               </Button>
+            </Link>
+
+            {user ? (
+              <UserAvatar user={userAvatarData} />
             ) : (
               <Link
                 href="/sign-in"
@@ -77,15 +82,6 @@ const Navbar = () => {
                 </Button>
               </Link>
             )}
-
-            <Link href="/listing/add-property">
-              <Button
-                size="sm"
-                className="bg-[#819067] hover:bg-[#0A400C] text-white cursor-pointer"
-              >
-                List Your Property
-              </Button>
-            </Link>
           </div>
 
           {/* Mobile Menu Button */}

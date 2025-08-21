@@ -7,3 +7,10 @@ export type TUserProfile = {
   about?: string;
   location: string;
 };
+
+export type TAvatarDropdownProps = {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+};
