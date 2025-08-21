@@ -28,6 +28,7 @@ export const useAddListing = (
 };
 
 type ParamValue = string | number | boolean | undefined | null;
+
 export type ListingsParams = Record<string, ParamValue>;
 type AnyObj = Record<string, any>;
 

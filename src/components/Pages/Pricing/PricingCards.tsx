@@ -19,14 +19,6 @@ const PricingCards = () => {
     setIsPaymentModalOpen(true);
   };
 
-  const handlePaymentComplete = (paymentData: any) => {
-    console.log("Payment completed:", paymentData);
-    // Handle successful payment
-    setIsPaymentModalOpen(false);
-    setSelectedPlan(null);
-    // You could redirect to a success page or show a success message
-  };
-
   const handlePaymentCancel = () => {
     setIsPaymentModalOpen(false);
     setSelectedPlan(null);
@@ -255,7 +247,6 @@ const PricingCards = () => {
       <PaymentModal
         isOpen={isPaymentModalOpen}
         onClose={handlePaymentCancel}
-        onPaymentComplete={handlePaymentComplete}
         selectedPlan={selectedPlan}
       />
     </>

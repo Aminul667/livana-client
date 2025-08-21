@@ -1,4 +1,4 @@
-import PropertyDetails from "@/components/Pages/Propertiex/PropertyDetails";
+import PropertyDetails from "@/components/Pages/Properties/PropertyDetails";
 import { getListingById } from "@/Services/ListingServices";
 
 const SinglePropertyPage = async ({

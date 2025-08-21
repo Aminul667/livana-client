@@ -1,16 +1,7 @@
 import PricingCards from "@/components/Pages/Pricing/PricingCards";
-import { getDraftListingById } from "@/Services/ListingServices";
 import { Check } from "lucide-react";
-import React from "react";
 
-const PricingPage = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const { id } = await params;
-  const data = await getDraftListingById(id);
-
-  if (!data) {
-    return <h2>Loading...</h2>;
-  }
-
+const PricingPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FEFAE0] to-[#B1AB86]/20 mt-16">
       <div className="container mx-auto px-4 py-16">

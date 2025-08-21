@@ -19,7 +19,7 @@ export const useUserLogin = (
   options?: UseMutationOptions<any, Error, FieldValues>
 ) => {
   return useMutation<any, Error, FieldValues>({
-    mutationKey: ["USER_LOGIN"],
+    mutationKey: ["user-login"],
     mutationFn: loginUser,
     onError: (error) => {
       toast.error(error.message);

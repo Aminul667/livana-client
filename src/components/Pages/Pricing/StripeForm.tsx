@@ -19,7 +19,10 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import { Button } from "@/components/ui/button";
-import { useCreatePaymentIntent } from "@/hooks/payment.hook";
+import {
+  useAddPaymentHistory,
+  useCreatePaymentIntent,
+} from "@/hooks/payment.hook";
 import {
   StripeCardCvcElementOptions,
   StripeCardExpiryElementOptions,
@@ -27,6 +30,8 @@ import {
   StripeElementStyle,
 } from "@stripe/stripe-js";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { useParams, useRouter } from "next/navigation";
 
 const SHARED_STYLE: StripeElementStyle = {
   base: {
@@ -62,6 +67,19 @@ type TPrice = {
 };
 
 const StripeForm = ({ planId, price, total }: TPrice) => {
+  const { id } = useParams<{ id: string }>();
+  const router = useRouter();
+
+  console.log("Id from stripe form", id);
+
+  const { mutate: handleAddPaymentHistory, isPending: historyPending } =
+    useAddPaymentHistory({
+      onSuccess: () => {
+        toast.success("Payment history is added successfully");
+        router.push(`/properties`);
+      },
+    });
+
   const stripe = useStripe();
   const elements = useElements();
 
@@ -177,7 +195,14 @@ const StripeForm = ({ planId, price, total }: TPrice) => {
         elements.getElement(CardExpiryElement)?.clear();
         elements.getElement(CardCvcElement)?.clear();
         // TODO: notify backend / close modal, etc.
-        alert("Thanks for your payment");
+        const paymentData = {
+          propertyId: id,
+          type: planId,
+          amount: total,
+          transactionId: clientSecret as string,
+        };
+
+        handleAddPaymentHistory(paymentData);
       } else {
         setErrs((p) => ({
           ...p,

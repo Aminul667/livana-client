@@ -23,7 +23,6 @@ import envConfig from "@/config/envConfig";
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onPaymentComplete: (paymentData: any) => void;
   selectedPlan: IPricingPlan | null;
 }
 

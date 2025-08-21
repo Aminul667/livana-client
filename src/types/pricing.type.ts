@@ -29,3 +29,16 @@ export interface IPaymentForm {
   // Agreement
   agreeToTerms: boolean;
 }
+
+export interface TPayment {
+  propertyId?: string;
+  type: string;
+  amount: number;
+  transactionId: string;
+}
+
+export interface TPaymentResponse {
+  success: boolean;
+  message: string;
+  data: TPayment;
+}
