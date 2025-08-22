@@ -45,12 +45,12 @@ const Navbar = () => {
             >
               How it Works
             </Link>
-            <a
-              href="#"
+            <Link
+              href="/support"
               className="text-[#0A400C] hover:text-[#819067] font-medium transition-colors"
             >
               Support
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Auth & Actions */}
@@ -115,12 +115,12 @@ const Navbar = () => {
               >
                 How it Works
               </Link>
-              <a
-                href="#"
+              <Link
+                href="/support"
                 className="text-[#0A400C] hover:text-[#819067] font-medium transition-colors"
               >
                 Support
-              </a>
+              </Link>
               <div className="flex space-x-2 pt-2">
                 <Link href="/sign-in" className="w-1/2">
                   <Button
