@@ -27,3 +27,18 @@ export const registerUser = async (userData: FieldValues): Promise<any> => {
   }
 };
 
+export const getUserById = async (id: string) => {
+  try {
+    const { data } = await axiosInstance.get(`/user/${id}`);
+
+    return data.data;
+  } catch (error) {
+    const axiosError = error as AxiosError;
+
+    console.error("❌ Axios Error:", axiosError.toJSON?.() || axiosError);
+    throw new Error(
+      (axiosError.response?.data as { message?: string })?.message ||
+        axiosError.message
+    );
+  }
+};

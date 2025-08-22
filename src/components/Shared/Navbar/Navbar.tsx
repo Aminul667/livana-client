@@ -5,12 +5,10 @@ import { useCurrentUser } from "@/hooks/auth.hooks";
 import { TAvatarDropdownProps } from "@/types/user.types";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import UserAvatar from "./UserAvatar";
 
 const Navbar = () => {
-  const router = useRouter();
   const { data: user, isLoading } = useCurrentUser();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,18 +33,18 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
-            <a
-              href="#"
+            <Link
+              href="/properties"
               className="text-[#0A400C] hover:text-[#819067] font-medium transition-colors"
             >
               Browse Rentals
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              href="/how-it-works"
               className="text-[#0A400C] hover:text-[#819067] font-medium transition-colors"
             >
               How it Works
-            </a>
+            </Link>
             <a
               href="#"
               className="text-[#0A400C] hover:text-[#819067] font-medium transition-colors"
@@ -105,18 +103,18 @@ const Navbar = () => {
         {isMenuOpen && (
           <div className="lg:hidden border-t border-[#B1AB86]/20 py-4">
             <div className="flex flex-col space-y-4">
-              <a
-                href="#"
+              <Link
+                href="/properties"
                 className="text-[#0A400C] hover:text-[#819067] font-medium transition-colors"
               >
                 Browse Rentals
-              </a>
-              <a
-                href="#"
+              </Link>
+              <Link
+                href="/how-it-works"
                 className="text-[#0A400C] hover:text-[#819067] font-medium transition-colors"
               >
                 How it Works
-              </a>
+              </Link>
               <a
                 href="#"
                 className="text-[#0A400C] hover:text-[#819067] font-medium transition-colors"
