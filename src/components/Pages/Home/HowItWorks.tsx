@@ -10,6 +10,7 @@ import {
   Search,
   Users,
 } from "lucide-react";
+import Link from "next/link";
 
 const rentersSteps = [
   {
@@ -215,15 +216,19 @@ const HowItWorks = () => {
             for their rental needs
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-[#819067] hover:bg-[#0A400C] text-white px-8 py-3 rounded-full">
-              Start Searching
-            </Button>
-            <Button
-              variant="outline"
-              className="border-[#819067] text-[#819067] hover:bg-[#819067] hover:text-white px-8 py-3 rounded-full bg-white"
-            >
-              List Your Property
-            </Button>
+            <Link href="/properties">
+              <Button className="bg-[#819067] hover:bg-[#0A400C] text-white px-8 py-3 rounded-full cursor-pointer">
+                Start Searching
+              </Button>
+            </Link>
+            <Link href="/listing/add-property">
+              <Button
+                variant="outline"
+                className="border-[#819067] text-[#819067] hover:bg-[#819067] hover:text-white px-8 py-3 rounded-full bg-white cursor-pointer"
+              >
+                List Your Property
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

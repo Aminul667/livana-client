@@ -312,7 +312,7 @@ const Support = () => {
                     </label>
                     <Textarea
                       required
-                      rows={6}
+                      rows={10}
                       value={contactForm.message}
                       onChange={(e) =>
                         setContactForm({
