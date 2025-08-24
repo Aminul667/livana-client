@@ -16,7 +16,6 @@ const UserProfile = () => {
     return <h2>Loading...</h2>;
   }
 
-  console.log("Data", user);
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FEFAE0] to-[#B1AB86]/20 py-8 px-4 mt-16">
       <div className="container mx-auto max-w-4xl">
@@ -35,7 +34,7 @@ const UserProfile = () => {
                 Profile Information
               </CardTitle>
 
-              <Link href={`/profile/edit/${user.id}`}>
+              <Link href={`/profile/edit`}>
                 <Button className="bg-[#819067] hover:bg-[#0A400C] text-white cursor-pointer">
                   <Edit className="w-4 h-4 mr-2" />
                   Edit Profile
