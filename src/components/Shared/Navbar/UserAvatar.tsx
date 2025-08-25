@@ -12,7 +12,14 @@ import {
 import { logout } from "@/Services/AuthServices";
 import { TAvatarDropdownProps } from "@/types/user.types";
 import { AvatarFallback } from "@radix-ui/react-avatar";
-import { CreditCard, LogOut, Settings, User, Users } from "lucide-react";
+import {
+  CreditCard,
+  LayoutDashboard,
+  LogOut,
+  Settings,
+  User,
+  Users,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const UserAvatar = ({ user }: { user: TAvatarDropdownProps }) => {
@@ -51,7 +58,14 @@ const UserAvatar = ({ user }: { user: TAvatarDropdownProps }) => {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="cursor-pointer"
-          onClick={() => router.push(`/profile/${user.id}`)}
+          onClick={() => router.push(`/dashboard/${user.role}`)}
+        >
+          <LayoutDashboard className="mr-2 h-4 w-4" />
+          <span>Dashboard</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => router.push(`/profile`)}
         >
           <User className="mr-2 h-4 w-4" />
           <span>Profile</span>

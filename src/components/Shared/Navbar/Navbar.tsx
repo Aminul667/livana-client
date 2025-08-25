@@ -17,6 +17,7 @@ const Navbar = () => {
     id: user?.id,
     name: `${user?.profile.firstName} ${user?.profile.lastName}`,
     email: user?.email,
+    role: user?.role,
     avatar: user?.profile.profilePhoto,
   };
 
