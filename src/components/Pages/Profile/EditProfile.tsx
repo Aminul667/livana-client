@@ -102,14 +102,24 @@ const EditProfile = () => {
                         <div className="relative inline-block mb-4">
                           <Avatar className="w-32 h-32 border-4 border-[#B1AB86]/30">
                             <AvatarImage
-                              src={previewUrl || user.profile?.profilePhoto}
-                              alt={`${user.profile.firstName} ${user.profile.lastName}`}
+                              src={
+                                previewUrl || user.profile?.profilePhoto || ""
+                              }
+                              alt={
+                                user.profile
+                                  ? `${user.profile.firstName ?? ""} ${
+                                      user.profile.lastName ?? ""
+                                    }`
+                                  : "Profile photo"
+                              }
                             />
                             <AvatarFallback className="bg-[#819067] text-white text-2xl">
-                              {getInitials(
-                                user.profile.firstName,
-                                user.profile.lastName
-                              )}
+                              {user.profile
+                                ? getInitials(
+                                    user.profile.firstName ?? "",
+                                    user.profile.lastName ?? ""
+                                  )
+                                : ""}
                             </AvatarFallback>
                           </Avatar>
 
@@ -132,8 +142,13 @@ const EditProfile = () => {
                         )}
 
                         <h3 className="text-xl font-semibold text-[#0A400C] mb-1">
-                          {user.profile.firstName} {user.profile.lastName}
+                          {user.profile
+                            ? `${user.profile.firstName ?? ""} ${
+                                user.profile.lastName ?? ""
+                              }`.trim()
+                            : "No Name"}
                         </h3>
+
                         <Badge className="bg-[#819067]/10 text-[#819067] hover:bg-[#819067]/20">
                           {user.role}
                         </Badge>

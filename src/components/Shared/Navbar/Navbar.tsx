@@ -15,10 +15,13 @@ const Navbar = () => {
 
   const userAvatarData: TAvatarDropdownProps = {
     id: user?.id,
-    name: `${user?.profile.firstName} ${user?.profile.lastName}`,
+    name:
+      [user?.profile?.firstName, user?.profile?.lastName]
+        .filter(Boolean)
+        .join(" ") || undefined,
     email: user?.email,
     role: user?.role,
-    avatar: user?.profile.profilePhoto,
+    avatar: user?.profile?.profilePhoto,
   };
 
   return (
@@ -56,14 +59,16 @@ const Navbar = () => {
 
           {/* Desktop Auth & Actions */}
           <div className="hidden lg:flex items-center space-x-4">
-            <Link href="/listing/add-property">
-              <Button
-                size="sm"
-                className="bg-[#819067] hover:bg-[#0A400C] text-white cursor-pointer"
-              >
-                List Your Property
-              </Button>
-            </Link>
+            {user?.role !== "tenant" && (
+              <Link href="/listing/add-property">
+                <Button
+                  size="sm"
+                  className="bg-[#819067] hover:bg-[#0A400C] text-white cursor-pointer"
+                >
+                  List Your Property
+                </Button>
+              </Link>
+            )}
 
             {user ? (
               <UserAvatar user={userAvatarData} />

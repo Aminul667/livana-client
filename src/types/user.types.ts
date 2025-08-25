@@ -16,7 +16,7 @@ export type TUserProfile = {
 
 export type TAvatarDropdownProps = {
   id: string;
-  name: string;
+  name?: string;
   email: string;
   role: UserRole;
   avatar?: string;

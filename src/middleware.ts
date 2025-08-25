@@ -51,7 +51,15 @@ export function middleware(request: NextRequest) {
 
     if (!isProfileCompleted) {
       return NextResponse.redirect(
-        new URL(`/profile/edit/${userId}`, request.url)
+        new URL(`/profile/edit`, request.url)
+      );
+    }
+  }
+
+  if (pathname === "/profile") {
+    if (!isProfileCompleted) {
+      return NextResponse.redirect(
+        new URL(`/profile/edit`, request.url)
       );
     }
   }
@@ -64,6 +72,7 @@ export const config = {
     "/sign-in",
     "/sign-up",
     "/listing/:path*",
+    "/profile/:path*",
     // Add more protected routes here
   ],
 };
