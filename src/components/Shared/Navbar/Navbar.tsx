@@ -9,7 +9,7 @@ import { useState } from "react";
 import UserAvatar from "./UserAvatar";
 
 const Navbar = () => {
-  const { data: user, isLoading } = useCurrentUser();
+  const { data: user } = useCurrentUser();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
