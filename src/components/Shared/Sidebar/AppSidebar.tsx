@@ -3,6 +3,7 @@
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -12,10 +13,11 @@ import {
 } from "@/components/ui/sidebar";
 import { ROLE_LABEL, ROLE_TO_MENU } from "@/constants/sidebar.constants";
 import { useCurrentUser } from "@/hooks/auth.hooks";
-import { UserRole } from "@/types/user.types";
+import { TAvatarDropdownProps, UserRole } from "@/types/user.types";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import SidebarNaveUser from "./SidebarNaveUser";
 
 const AppSidebar = () => {
   const pathname = usePathname();
@@ -23,6 +25,14 @@ const AppSidebar = () => {
   const { data: user, isLoading } = useCurrentUser();
   const role = user?.role as UserRole;
   const menu = ROLE_TO_MENU[role];
+
+  const userAvatarData: TAvatarDropdownProps = {
+    id: user?.id,
+    name: `${user?.profile.firstName} ${user?.profile.lastName}`,
+    email: user?.email,
+    role: user?.role,
+    avatar: user?.profile.profilePhoto,
+  };
 
   if (isLoading) {
     return <h2>Loading ...</h2>;
@@ -62,6 +72,10 @@ const AppSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        {/* <NavUser user={data.user} /> */}
+        <SidebarNaveUser user={userAvatarData} />
+      </SidebarFooter>
     </Sidebar>
   );
 };
