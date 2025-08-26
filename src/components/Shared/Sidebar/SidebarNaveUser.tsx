@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/sidebar";
 import { logout } from "@/Services/AuthServices";
 import { TAvatarDropdownProps } from "@/types/user.types";
-import { BadgeCheck, Bell, ChevronsUpDown, Home, LogOut } from "lucide-react";
+import { Bell, ChevronsUpDown, Home, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -43,10 +43,12 @@ const SidebarNaveUser = ({ user }: { user: TAvatarDropdownProps }) => {
                 <AvatarImage src={user?.avatar} alt={user?.name} />
                 <AvatarFallback className="bg-primary text-primary-foreground">
                   {user?.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")
-                    .toUpperCase()}
+                    ? user.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .toUpperCase()
+                    : "CN"}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">

@@ -28,10 +28,13 @@ const AppSidebar = () => {
 
   const userAvatarData: TAvatarDropdownProps = {
     id: user?.id,
-    name: `${user?.profile.firstName} ${user?.profile.lastName}`,
+    name:
+      [user?.profile?.firstName, user?.profile?.lastName]
+        .filter(Boolean)
+        .join(" ") || undefined,
     email: user?.email,
     role: user?.role,
-    avatar: user?.profile.profilePhoto,
+    avatar: user?.profile?.profilePhoto,
   };
 
   if (isLoading) {
