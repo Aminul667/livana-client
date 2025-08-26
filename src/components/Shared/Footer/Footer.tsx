@@ -35,7 +35,7 @@ const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <Home className="h-8 w-8 text-[#FEFAE0]" />
-              <h3 className="text-2xl font-bold text-[#FEFAE0]">RentEase</h3>
+              <h3 className="text-2xl font-bold text-[#FEFAE0]">Livana</h3>
             </div>
             <p className="text-gray-200 leading-relaxed">
               Your trusted platform for finding and listing rental properties.
@@ -169,7 +169,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-2 text-gray-200">
                 <Mail className="h-4 w-4" />
-                <span className="text-sm">support@rentease.com</span>
+                <span className="text-sm">support@iivana.com</span>
               </div>
             </div>
 
@@ -237,7 +237,7 @@ const Footer = () => {
             {/* Copyright */}
             <div className="flex items-center space-x-2 text-gray-300 text-sm">
               <Shield className="h-4 w-4" />
-              <span>© 2024 RentEase. All rights reserved.</span>
+              <span>© {new Date().getFullYear()} Livana. All rights reserved.</span>
             </div>
           </div>
         </div>

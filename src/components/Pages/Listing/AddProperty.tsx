@@ -51,7 +51,7 @@ const AddProperty = () => {
   const { mutate: handleAddListing, isPending } = useAddListing({
     onSuccess: (data) => {
       toast.success("Listing is added successfully");
-      router.push(`/listing/preview/${data?.data.id}`);
+      router.push(`/listing/${data?.data.id}/preview`);
     },
   });
 
