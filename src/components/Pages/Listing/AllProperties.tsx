@@ -1,7 +1,6 @@
 "use client";
 
 import PropertyCard from "@/components/Shared/UI/PropertyCard";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -38,6 +37,8 @@ const BEDROOM = { MIN: 0, MAX: 100, STEP: 1 } as const;
 const AllProperties = () => {
   const { params, setParam, setRange, resetAll } = useListingFilters();
   const { data: propertyData, isFetching, error } = useGetAllListing(params);
+
+  console.log("Params", params);
 
   // UI-only state
   const [showFilters, setShowFilters] = useState(false);
@@ -146,6 +147,23 @@ const AllProperties = () => {
     [setParam]
   );
 
+  // sort
+  const sortBy = params.sortBy ?? "";
+  const handleSortByChange = useCallback(
+    (val: string) => {
+      setParam("sortBy", val || undefined);
+    },
+    [setParam]
+  );
+
+  const sortOrder = params.sortOrder ?? "";
+  const handleSortOrderChange = useCallback(
+    (val: string) => {
+      setParam("sortOrder", val || undefined);
+    },
+    [setParam]
+  );
+
   console.log("data", propertyData);
 
   return (
@@ -186,42 +204,37 @@ const AllProperties = () => {
                 )} */}
             </Button>
 
-            {/* Quick Filters */}
-            <div className="hidden md:flex items-center gap-2">
-              <Select>
-                <SelectTrigger className="w-32 bg-white border-[#B1AB86]/30">
-                  <SelectValue placeholder="Type" />
-                </SelectTrigger>
-                <SelectContent className="bg-white border-[#B1AB86]/30">
-                  <SelectItem value="rent">For Rent</SelectItem>
-                  <SelectItem value="sale">For Sale</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select>
-                <SelectTrigger className="w-40 bg-white border-[#B1AB86]/30">
-                  <SelectValue placeholder="City" />
-                </SelectTrigger>
-                <SelectContent className="bg-white border-[#B1AB86]/30">
-                  {["A", "B", "C"].map((city) => (
-                    <SelectItem key={city} value={city}>
-                      {city}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="flex gap-2">
+              {/* Quick Filters */}
+              <div className="md:flex items-center gap-2">
+                <Select value={sortBy} onValueChange={handleSortByChange}>
+                  <SelectTrigger className="w-32 bg-white border-[#B1AB86]/30">
+                    <SelectValue placeholder="Sort By" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border-[#B1AB86]/30">
+                    <SelectItem value="price">Price</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              {/* Quick Filters */}
+              <div className="md:flex items-center gap-2">
+                <Select value={sortOrder} onValueChange={handleSortOrderChange}>
+                  <SelectTrigger className="w-32 bg-white border-[#B1AB86]/30">
+                    <SelectValue placeholder="Sort Order" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border-[#B1AB86]/30">
+                    <SelectItem value="asc">Low to High</SelectItem>
+                    <SelectItem value="desc">High to Low</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             <span className="text-sm text-[#819067]">
-              {/* {filteredProperties.length} properties
-                {totalPages > 1 && (
-                  <span className="ml-2">
-                    (Page {currentPage} of {totalPages})
-                  </span>
-                )} */}
-              20
+              {propertyData?.meta?.total} properties
+              <span className="ml-2">(page {propertyData?.meta?.page})</span>
             </span>
             <div className="flex items-center border border-[#B1AB86]/30 rounded-md bg-white">
               <Button

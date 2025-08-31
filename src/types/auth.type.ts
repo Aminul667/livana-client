@@ -10,3 +10,21 @@ export interface ICreateUserProfileResponse {
     updatedAt: string;
   };
 }
+
+export type RegisterPayload = {
+  email: string;
+  password: string;
+  role: "tenant" | "landlord" | "admin";
+};
+
+export type RegisterResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    id: string;
+    email: string;
+    role: string;
+    isProfileCompleted: boolean;
+    createdAt: string;
+  };
+};

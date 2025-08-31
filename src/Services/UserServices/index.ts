@@ -2,14 +2,15 @@
 "use server";
 
 import axiosInstance from "@/lib/AxiosInstance";
+import { RegisterPayload, RegisterResponse } from "@/types/auth.type";
 import { AxiosError } from "axios";
-import { revalidateTag } from "next/cache";
-import { FieldValues } from "react-hook-form";
 
-export const registerUser = async (userData: FieldValues): Promise<any> => {
+export const registerUser = async (
+  userData: RegisterPayload
+): Promise<RegisterResponse> => {
   try {
     const { data } = await axiosInstance.post("/user/create-user", userData);
-    revalidateTag("users");
+
     return data;
   } catch (error) {
     const axiosError = error as AxiosError;

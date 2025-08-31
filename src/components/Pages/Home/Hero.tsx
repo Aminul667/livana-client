@@ -1,27 +1,11 @@
 import Image from "next/image";
-import { useState } from "react";
+
 import happyFamily from "../../../assets/happy-family-living-room.jpg";
-import { CalendarIcon, MapPin, Search } from "lucide-react";
+import { MapPin, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 const Hero = () => {
-  const [date, setDate] = useState<Date>();
-
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 pb-20 md:pb-0">
       {/* Background with Family Image */}
@@ -62,13 +46,10 @@ const Hero = () => {
 
           {/* Search Form */}
           <div className="pt-8">
-            <div className="bg-[#FEFAE0]/95 backdrop-blur-md rounded-2xl p-6 max-w-4xl mx-auto shadow-2xl border border-[#B1AB86]/30">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+            <div className="bg-[#FEFAE0]/95 backdrop-blur-md rounded-2xl p-6 max-w-2xl mx-auto shadow-2xl border border-[#B1AB86]/30">
+              <div className="flex items-center justify-between flex-col md:flex-row  gap-5">
                 {/* Location Search */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-[#0A400C] block">
-                    Location
-                  </label>
+                <div className="space-y-2 w-full">
                   <div className="relative">
                     <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#819067] w-4 h-4" />
                     <Input
@@ -79,95 +60,8 @@ const Hero = () => {
                   </div>
                 </div>
 
-                {/* Date Selector */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-[#0A400C] block">
-                    Move-in Date
-                  </label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start text-left font-normal bg-white border-[#B1AB86]/30 hover:bg-[#B1AB86]/5 text-[#0A400C]"
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4 text-[#819067]" />
-                        {date ? (
-                          format(date, "PPP")
-                        ) : (
-                          <span className="text-[#819067]/60">Select date</span>
-                        )}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      className="w-auto p-0 bg-white border-[#B1AB86]/30"
-                      align="start"
-                    >
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        initialFocus
-                        className="text-[#0A400C]"
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-
-                {/* Bedrooms Selector */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-[#0A400C] block">
-                    Bedrooms
-                  </label>
-                  <Select>
-                    <SelectTrigger className="bg-white w-full border-[#B1AB86]/30 focus:border-[#819067] focus:ring-[#819067]/20 text-[#0A400C]">
-                      <SelectValue placeholder="Any" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white border-[#B1AB86]/30">
-                      <SelectItem
-                        value="any"
-                        className="text-[#0A400C] hover:bg-[#B1AB86]/10"
-                      >
-                        Any
-                      </SelectItem>
-                      <SelectItem
-                        value="studio"
-                        className="text-[#0A400C] hover:bg-[#B1AB86]/10"
-                      >
-                        Studio
-                      </SelectItem>
-                      <SelectItem
-                        value="1"
-                        className="text-[#0A400C] hover:bg-[#B1AB86]/10"
-                      >
-                        1 Bedroom
-                      </SelectItem>
-                      <SelectItem
-                        value="2"
-                        className="text-[#0A400C] hover:bg-[#B1AB86]/10"
-                      >
-                        2 Bedrooms
-                      </SelectItem>
-                      <SelectItem
-                        value="3"
-                        className="text-[#0A400C] hover:bg-[#B1AB86]/10"
-                      >
-                        3 Bedrooms
-                      </SelectItem>
-                      <SelectItem
-                        value="4"
-                        className="text-[#0A400C] hover:bg-[#B1AB86]/10"
-                      >
-                        4+ Bedrooms
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
                 {/* Search Button */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-transparent block">
-                    Search
-                  </label>
+                <div>
                   <Button
                     size="lg"
                     className="w-full bg-[#819067] hover:bg-[#0A400C] text-[#FEFAE0] font-semibold transition-all duration-300 transform hover:scale-105"

@@ -18,11 +18,18 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Controller } from "react-hook-form";
+import { toast } from "sonner";
 
 const SignUp = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const { mutate: handleUseRegisterUser, isPending } = useRegisterUser();
+
+  const { mutate: handleUseRegisterUser, isPending } = useRegisterUser({
+    onSuccess: () => {
+      toast.success("User registration successful.");
+      router.push("/sign-in");
+    },
+  });
 
   const onSubmit = (data: TSignUpFormValues) => {
     const userData = {
@@ -32,9 +39,6 @@ const SignUp = () => {
     };
 
     handleUseRegisterUser(userData);
-    if (!isPending) {
-      router.push("/sign-in");
-    }
   };
 
   return (

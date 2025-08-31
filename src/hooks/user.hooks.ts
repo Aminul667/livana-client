@@ -1,16 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { registerUser } from "@/Services/UserServices";
-import { useMutation } from "@tanstack/react-query";
+import { RegisterPayload, RegisterResponse } from "@/types/auth.type";
+import { useMutation, UseMutationOptions } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { toast } from "sonner";
 
-export const useRegisterUser = () => {
-  return useMutation({
-    mutationKey: ["user", "register"],
+export const useRegisterUser = (
+  options?: UseMutationOptions<RegisterResponse, Error, RegisterPayload>
+) => {
+  return useMutation<RegisterResponse, Error, RegisterPayload>({
+    mutationKey: ["register-user"],
     mutationFn: registerUser,
-    onSuccess: () => {
-      toast.success("User registration successful.");
+    onError: (error) => {
+      const axiosError = error as AxiosError<{ message?: string }>;
+      const message = axiosError.response?.data?.message || error.message;
+      toast.error(message);
     },
-    onError: (error: Error) => {
-      toast.error(error.message);
-    },
+    ...options,
   });
 };

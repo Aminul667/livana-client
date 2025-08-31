@@ -48,6 +48,14 @@ export const useListingFilters = () => {
       furnished: toStr(sp.get("furnished")),
       rentFrequency: toStr(sp.get("rentFrequency")),
       availableMonth: toStr(sp.get("availableMonth")),
+
+      // sort
+      sortBy: toStr(sp.get("sortBy")),
+      sortOrder: toStr(sp.get("sortOrder")),
+      
+      // meta
+      page: toNum(sp.get("page")),
+      limit: toNum(sp.get("limit")),
     };
   }, [searchParams]);
 

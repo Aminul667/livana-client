@@ -1,4 +1,5 @@
 import AllProperties from "@/components/Pages/Listing/AllProperties";
+import { Suspense } from "react";
 
 const PropertyPage = () => {
   return (
@@ -13,7 +14,9 @@ const PropertyPage = () => {
             Find your perfect rental or purchase from our curated listings
           </p>
         </div>
-        <AllProperties />
+        <Suspense fallback={<h2>Loading</h2>}>
+          <AllProperties />
+        </Suspense>
       </div>
     </div>
   );
